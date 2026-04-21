@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import anthropic; print\\(anthropic.__version__\\)\")",
+      "Bash(python3 -c \"import requests; print\\('requests ok'\\)\")",
+      "Bash(python3 -c \"import dotenv; print\\('dotenv ok'\\)\")",
+      "Bash(pip3 install *)",
+      "Bash(python3 *)",
+      "WebSearch",
+      "Bash(export IG_USER_ID=17841433555586625)",
+      "Bash(export IG_ACCESS_TOKEN=EAAXN41AOpWsBRAcrQ3Any2j6p6aRchhStQFOeaUxaJZBZC6pp5QwNJ3bQf5WpfRLbqzJmC0ZBJ29fUWfPpasVxuVBl8V8PJKRrxFcDFAPaJ5mgdZAfF3r2rQzKjKV1CHh05ZAoW3KzCRJLh0mOs9ZBYIt74RYEjADOKCXMji71fgKVg6S5pKFxiylgQ72O1tqH)",
+      "Bash(export IMGBB_API_KEY=68dc5acd153e849d428de9b117511dc0)",
+      "Bash(chmod +x *)",
+      "Bash(crontab -l)",
+      "Bash(bash -n /Users/watanaberyouichi/utage-claude/scripts/daily_auto_post.sh)",
+      "Bash(curl -s https://api.github.com/repos/ryoichi0901/sns-images)"
+    ]
+  }
+}

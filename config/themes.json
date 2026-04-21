@@ -1,0 +1,56 @@
+{
+  "persona": "金融機関20年勤務後、AI×副業で月収アップを実現。NISA・投資信託・節税・副業の実践的アドバイスを発信するFPライター。",
+  "account_concept": "金融×AI副業で資産形成を加速する具体的ノウハウを毎日発信",
+  "required_tags": ["#AI副業", "#資産形成", "#副業収入", "#金融リテラシー"],
+  "weekday_themes": {
+    "0": {
+      "name": "月曜：積立NISAスタートの日",
+      "topic": "NISA・つみたて投資・長期投資の基礎と実践",
+      "tone": "週始めのモチベーションを上げる前向きなトーン",
+      "extra_tags": ["#NISA", "#つみたてNISA", "#積立投資", "#長期投資", "#投資初心者"],
+      "image_style": "navy blue and gold, coins and growth chart, clean professional"
+    },
+    "1": {
+      "name": "火曜：AI副業テクニックの日",
+      "topic": "ChatGPT・Claude・AIツールを使った副業収入アップの具体的方法",
+      "tone": "すぐ実践できる具体的なハウツー形式",
+      "extra_tags": ["#ChatGPT副業", "#AI活用", "#在宅副業", "#フリーランス", "#副業2024"],
+      "image_style": "AI technology blue purple gradient, laptop and data visualization, modern"
+    },
+    "2": {
+      "name": "水曜：副業収入の仕組み化・自動化の日",
+      "topic": "副業収入を仕組み化・自動化して寝ている間も稼ぐ方法・ストック型収入の作り方",
+      "tone": "「自分が働かなくても収入が入る」仕組みへのワクワク感を伝えるトーン",
+      "extra_tags": ["#仕組み化", "#自動化", "#ストック収入", "#不労所得", "#副業自動化", "#収入の仕組み"],
+      "image_style": "automation and passive income, gears and money flow, teal and gold modern illustration"
+    },
+    "3": {
+      "name": "木曜：投資商品研究の日",
+      "topic": "投資信託・ETF・米国株・高配当株の選び方と運用戦略",
+      "tone": "データと実例を交えた説得力のある解説",
+      "extra_tags": ["#投資信託", "#ETF", "#米国株", "#高配当株", "#インデックス投資"],
+      "image_style": "stock market charts gold and dark background, professional financial"
+    },
+    "4": {
+      "name": "金曜：金融リテラシーUPの日",
+      "topic": "お金の教養・金融知識・複利の力・投資マインドセット",
+      "tone": "知的好奇心を刺激する教育的なトーン",
+      "extra_tags": ["#お金の勉強", "#金融知識", "#複利", "#マネーリテラシー", "#投資マインド"],
+      "image_style": "books and light bulb, gold and white, knowledge and wisdom theme"
+    },
+    "5": {
+      "name": "土曜：AI×副業実践レポートの日",
+      "topic": "AIツール活用の副業実績・月収報告・具体的な稼ぎ方事例",
+      "tone": "実体験ベースのリアルで信頼性の高いトーン",
+      "extra_tags": ["#副業月収", "#AI副業実績", "#在宅ワーク", "#サイドハッスル", "#収入報告"],
+      "image_style": "success and achievement, money and laptop, warm orange gold tones"
+    },
+    "6": {
+      "name": "日曜：ライフプランニングの日",
+      "topic": "FIRE・老後資金・教育費・ライフイベントに向けた資産計画",
+      "tone": "未来への希望と計画性を感じさせる穏やかなトーン",
+      "extra_tags": ["#FIRE", "#老後資金", "#ライフプラン", "#資産計画", "#経済的自由"],
+      "image_style": "family and future, sunrise landscape, peaceful blue and warm colors"
+    }
+  }
+}

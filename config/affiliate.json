@@ -1,0 +1,63 @@
+{
+  "_comment": "曜日ごとのアフィリエイト設定。URLはenv varから解決するため env_key を指定。fallback は LINKTREE_URL。",
+  "_env_vars": [
+    "AFFILIATE_LINK_FX            # FX口座開設リンク",
+    "AFFILIATE_LINK_NISA          # NISA・証券口座リンク",
+    "AFFILIATE_LINK_SIDE_BUSINESS # 副業・AI系リンク",
+    "LINKTREE_URL                 # リンクツリー（全リンクまとめ・fallback）"
+  ],
+  "theme_to_env_key": {
+    "nisa":          "AFFILIATE_LINK_NISA",
+    "ai_side_job":   "AFFILIATE_LINK_SIDE_BUSINESS",
+    "automation":    "AFFILIATE_LINK_SIDE_BUSINESS",
+    "investment":    "AFFILIATE_LINK_NISA",
+    "fx":            "AFFILIATE_LINK_FX",
+    "literacy":      "AFFILIATE_LINK_NISA",
+    "ai_report":     "AFFILIATE_LINK_SIDE_BUSINESS",
+    "life_plan":     "LINKTREE_URL"
+  },
+  "weekday_links": {
+    "0": {
+      "label": "無料NISA口座開設はこちら",
+      "cta": "👇 詳細はプロフィールリンクから",
+      "env_key": "AFFILIATE_LINK_NISA",
+      "theme": "nisa"
+    },
+    "1": {
+      "label": "AIツール副業入門ガイド（無料）",
+      "cta": "👇 無料で受け取る",
+      "env_key": "AFFILIATE_LINK_SIDE_BUSINESS",
+      "theme": "ai_side_job"
+    },
+    "2": {
+      "label": "収入自動化テンプレート配布中",
+      "cta": "👇 今すぐダウンロード",
+      "env_key": "AFFILIATE_LINK_SIDE_BUSINESS",
+      "theme": "automation"
+    },
+    "3": {
+      "label": "投資信託・ETF比較ツール（無料）",
+      "cta": "👇 無料で比較する",
+      "env_key": "AFFILIATE_LINK_NISA",
+      "theme": "investment"
+    },
+    "4": {
+      "label": "金融リテラシー診断（無料）",
+      "cta": "👇 今すぐ診断",
+      "env_key": "AFFILIATE_LINK_NISA",
+      "theme": "literacy"
+    },
+    "5": {
+      "label": "AI副業月収UPロードマップ",
+      "cta": "👇 無料で受け取る",
+      "env_key": "AFFILIATE_LINK_SIDE_BUSINESS",
+      "theme": "ai_report"
+    },
+    "6": {
+      "label": "資産形成ロードマップ全まとめ",
+      "cta": "👇 プロフィールリンクから全部見る",
+      "env_key": "LINKTREE_URL",
+      "theme": "life_plan"
+    }
+  }
+}

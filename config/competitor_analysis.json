@@ -1,0 +1,291 @@
+{
+  "_meta": {
+    "generated_at": "2026-04-17",
+    "method": "web search analysis",
+    "note": "Web検索から取得できた情報と2026年Instagram市場調査を統合。アカウント固有のデータが取得できたものはconfidence:high、市場パターンから推定したものはconfidence:inferred と明記。",
+    "sources": [
+      "https://www.instagram.com/ponkotsu_money/",
+      "https://www.instagram.com/riko_insta_ai/",
+      "https://mikimiki1021.com/",
+      "https://note.com/riko_nft/n/n313e227fbb07",
+      "https://akagami.blog/carousel/",
+      "https://www.sharecoto.co.jp/instagramlab/hashtag-update",
+      "https://knowledge-hd.co.jp/instagram-algorithm-2026/"
+    ]
+  },
+
+  "accounts": [
+    {
+      "handle": "ponkotsu_money",
+      "url": "https://www.instagram.com/ponkotsu_money/",
+      "account_name": "ポンコツ｜副業リアリティショー",
+      "niche": "副業・お金・リアリティ系",
+      "data_confidence": "partial",
+
+      "profile": {
+        "concept": "副業を「リアリティショー」として見せるドキュメンタリー形式。失敗・苦労も包み隠さず公開する脆弱性マーケティング",
+        "target_audience": "副業に興味はあるが一歩踏み出せない20〜30代の会社員"
+      },
+
+      "posting_patterns": {
+        "post_format": ["カルーセル（体験談・レポート形式）", "リール（短尺リアリティ）"],
+        "estimated_frequency": "週3〜5回",
+        "caption_structure": {
+          "hook": "「月○万稼いだ失敗談」「正直に話します」など共感型フック",
+          "body": "時系列で副業の経過・失敗・学びを告白形式で語る",
+          "cta": "「同じ経験ある人はコメントして」「保存して見返してね」"
+        },
+        "image_style": "手書き風テキスト・スクショ・家計簿風グラフ。加工しすぎない生っぽい雰囲気",
+        "confidence": "inferred"
+      },
+
+      "hashtag_strategy": {
+        "estimated_count": "5個（2026年ルール準拠）",
+        "likely_tags": ["#副業", "#副業収入", "#お金の話", "#副業リアル", "#月収報告"],
+        "confidence": "inferred"
+      },
+
+      "buzz_factors": [
+        "リアルな失敗談や収益公開（保存・シェア誘発）",
+        "「ポンコツ」キャラで親近感・読者の自己投影を促進",
+        "リアリティショー形式による連続視聴・フォロー促進"
+      ]
+    },
+
+    {
+      "handle": "anna_ai_0",
+      "url": "https://www.instagram.com/anna_ai_0/",
+      "account_name": "anna（AI副業系）",
+      "niche": "AI副業・AIツール活用",
+      "data_confidence": "low",
+
+      "profile": {
+        "concept": "AI×副業の具体的な稼ぎ方を発信。AIツール活用の実践情報",
+        "target_audience": "AIを使って副収入を作りたい初心者〜中級者"
+      },
+
+      "posting_patterns": {
+        "post_format": ["カルーセル（How-to・ステップ解説）", "リール（ツール紹介）"],
+        "estimated_frequency": "週3〜4回",
+        "caption_structure": {
+          "hook": "「AIで月○万稼ぐ方法」「これ知らないと損」等の数字×損失回避フック",
+          "body": "ステップ番号付きのリスト形式・ツール名と使い方を具体的に",
+          "cta": "「保存して後で実践して」「フォローで最新AI情報を受け取る」"
+        },
+        "image_style": "青・紫グラデーション。AIツールのスクショ・UI画面キャプチャを多用",
+        "confidence": "inferred"
+      },
+
+      "hashtag_strategy": {
+        "estimated_count": "5個（2026年ルール準拠）",
+        "likely_tags": ["#AI副業", "#ChatGPT", "#AI活用", "#副業初心者", "#在宅副業"],
+        "confidence": "inferred"
+      },
+
+      "buzz_factors": [
+        "具体的なAIツール名・操作手順の明示（保存率UP）",
+        "「初心者でも○分でできる」という参入障壁の低さを強調",
+        "新しいAIツール情報を素早く発信してシェアを誘発"
+      ]
+    },
+
+    {
+      "handle": "mikimiki1021",
+      "url": "https://www.instagram.com/mikimiki1021/",
+      "account_name": "mikimiki（Instagram運用の専門家）",
+      "niche": "Instagram運用・Canva・副業",
+      "data_confidence": "high",
+
+      "profile": {
+        "concept": "Instagram運用歴11年のプロが「インスタで稼ぐ方法」を体系的に発信。Webスクール・書籍も展開",
+        "follower_scale": "YouTube 30万+。Instagramも数万〜数十万規模",
+        "authority": "Instagram専門書を2冊出版（2冊目は2025年11月）。Webスクール受講者1,050名以上（2025年5月時点）",
+        "target_audience": "Instagramで収益化・フォロワー増加を目指す個人・主婦・副業希望者"
+      },
+
+      "posting_patterns": {
+        "post_format": ["カルーセル（教育・ノウハウ）", "リール（Before/After・解説）"],
+        "estimated_frequency": "週4〜6回（高頻度・安定投稿）",
+        "caption_structure": {
+          "hook": "「1投稿でフォロワー6,000人獲得した方法」など実績ベースの具体的数字フック",
+          "body": "番号付きステップ・箇条書きで情報を整理。スクロールしやすい構成",
+          "cta": "「スクール詳細はプロフリンクから」「保存して実践してね」"
+        },
+        "image_style": "Canvaで作成した統一感あるデザイン。白ベース＋ピンク・グリーン系アクセント。フォントは丸みのある日本語フォント",
+        "content_pillars": [
+          "Instagram最新アルゴリズム解説",
+          "フォロワー増加テクニック",
+          "Canvaデザイン術",
+          "投稿サイズ・仕様の最新情報",
+          "収益化方法（アフィリ・スクール誘導）"
+        ],
+        "confidence": "high"
+      },
+
+      "hashtag_strategy": {
+        "actual_count": "2026年の5個制限に準拠と推定",
+        "likely_tags": ["#インスタ運用", "#Instagram副業", "#Canva", "#フォロワーの増やし方", "#インスタ集客"],
+        "strategy": "ニッチタグ（1万〜10万投稿）を中心に選定。汎用タグは避ける傾向",
+        "confidence": "high"
+      },
+
+      "engagement_signals": {
+        "high_performing_content": [
+          "「1投稿でフォロワー6,000人獲得」など実績公開系",
+          "最新アルゴリズム変更の速報系（シェアされやすい）",
+          "Canva使い方ビフォーアフター系リール"
+        ],
+        "save_rate_strategy": "ノウハウ系カルーセルで保存率3%以上を狙う構成"
+      },
+
+      "buzz_factors": [
+        "実績数字（フォロワー数・受講者数）による信頼性担保",
+        "最新情報の速報性（アルゴリズム変更など）でシェアを誘発",
+        "書籍・スクールとの相互送客でアカウント権威性が高い"
+      ]
+    },
+
+    {
+      "handle": "riko_insta_ai",
+      "url": "https://www.instagram.com/riko_insta_ai/",
+      "account_name": "りこ（インスタ挫折ママをAIでゼロにする）",
+      "niche": "AI×Instagram副業（ママ・主婦向け）",
+      "data_confidence": "high",
+
+      "profile": {
+        "concept": "インスタに挫折した主婦・ママがAIを活用して再スタートできるよう支援",
+        "follower_count": "約2.5万人（確認済み）",
+        "community": "AIらぼ（メンバー300名以上）を運営",
+        "background": "会社員疲弊・シングル育児を経てフリーランス転身",
+        "target_audience": "育児中・時間がない主婦・ワーママで副収入を作りたい人"
+      },
+
+      "posting_patterns": {
+        "post_format": ["カルーセル（AI活用手順）", "リール（Before/After）", "テキスト投稿"],
+        "estimated_frequency": "週3〜5回",
+        "caption_structure": {
+          "hook": "「インスタに挫折したあなたへ」「AIがあれば誰でもできる」共感×希望型フック",
+          "body": "体験談＋AIツール活用の具体手順。初心者目線で専門用語を避ける",
+          "cta": "「AIらぼの詳細はプロフリンクから」「同じ悩みの方はコメントして」"
+        },
+        "image_style": "温かみのあるパステルカラー。主婦・ママが親しみやすいイラスト・アイコン使用",
+        "confidence": "high"
+      },
+
+      "hashtag_strategy": {
+        "estimated_count": "5個（2026年ルール準拠）",
+        "likely_tags": ["#ワーママ副業", "#AI副業", "#インスタ副業", "#主婦副業", "#在宅ワーク"],
+        "confidence": "inferred"
+      },
+
+      "buzz_factors": [
+        "「挫折した人向け」という明確なターゲティングで深い共感を獲得",
+        "AIを難しく見せない・脱スペック目線の発信で保存率UP",
+        "コミュニティ（AIらぼ）との双方向性でエンゲージメントが高い",
+        "リアルな転身ストーリーが信頼性を高める"
+      ]
+    },
+
+    {
+      "handle": "freelife_blog",
+      "url": "https://www.instagram.com/freelife_blog/",
+      "account_name": "freelife（ブログ×副業系）",
+      "niche": "ブログ収益化・副業・フリーランス",
+      "data_confidence": "low",
+
+      "profile": {
+        "concept": "ブログを軸にした副業・フリーランス生活の発信。Instagram×ブログの二軸運用モデル",
+        "target_audience": "ブログで稼ぎたい会社員・フリーランスを目指す人"
+      },
+
+      "posting_patterns": {
+        "post_format": ["カルーセル（収益レポート・ノウハウ）", "インフォグラフィック型単枚"],
+        "estimated_frequency": "週2〜4回",
+        "caption_structure": {
+          "hook": "「ブログ開始○ヶ月で月○万達成」実績公開型フック",
+          "body": "収益の内訳・使用ツール・具体的な数字を開示。ブログ記事への誘導も含む",
+          "cta": "「詳しくはブログで解説してます（プロフリンクから）」「保存して参考にしてね」"
+        },
+        "image_style": "シンプルな白・グレー背景。数字・グラフを大きく見せるインフォグラフィックスタイル",
+        "confidence": "inferred"
+      },
+
+      "hashtag_strategy": {
+        "estimated_count": "5個（2026年ルール準拠）",
+        "likely_tags": ["#ブログ収益化", "#副業ブログ", "#アフィリエイト", "#フリーランス", "#在宅ワーク"],
+        "confidence": "inferred"
+      },
+
+      "buzz_factors": [
+        "収益公開・月収報告の透明性（保存率・シェア率UP）",
+        "InstagramからブログへのSEO流入と相互送客モデル",
+        "具体的な数字（アクセス数・収益）が信頼性を高める"
+      ]
+    }
+  ],
+
+  "common_patterns": {
+    "caption_structure_template": {
+      "step1_hook": "最初の1〜2行（125字以内）で強烈な興味・共感・数字を提示。「〜知らないと損」「月○万稼いだ」「正直に話します」",
+      "step2_value": "3〜8枚のカルーセルまたはキャプション本文で具体的なノウハウ・体験を提供。番号付きリスト・箇条書きで読みやすく",
+      "step3_cta": "最後に保存・フォロー・コメント・プロフリンクへの誘導を1つに絞る"
+    },
+
+    "image_style_trends_2026": {
+      "dominant_format": "カルーセル（4〜10枚）がフィード投稿の主流。1枚目でスワイプ誘発が必須",
+      "color_schemes": [
+        "ネイビー×ゴールド（金融・信頼感）",
+        "白×パステル（親しみやすさ）",
+        "黒×ゴールド（高級感・実績系）",
+        "青紫グラデーション（AIテック系）"
+      ],
+      "text_on_image": "1枚目は大きな見出し1行のみ。情報は2枚目以降に分散",
+      "no_text_overlay_trend": "テキストなし・高品質写真×キャプション型も台頭中"
+    },
+
+    "hashtag_rules_2026": {
+      "max_recommended": 5,
+      "background": "2025年12月にMeta公式が「ハッシュタグは最大5個が最適」と発表",
+      "strategy": "汎用大タグ（100万+投稿）より、ニッチタグ（1万〜10万投稿）を選ぶほうがリーチ効率が高い",
+      "top_niche_tags_finance_ai": [
+        "#AI副業", "#資産形成", "#副業収入", "#金融リテラシー",
+        "#NISA", "#副業初心者", "#仕組み化", "#不労所得", "#投資信託"
+      ]
+    },
+
+    "engagement_drivers": {
+      "most_important_signal_2026": "シェア（友達に送りたい）> 保存 > コメント > いいね の優先順位",
+      "save_rate_benchmark": "保存率3%以上でバズり始める。2%以上で投稿が伸び始める",
+      "hook_effectiveness": {
+        "question_type": "完了率82%（例：「あなたは知ってますか？」）",
+        "surprise_type": "完了率79%（例：「銀行員20年の私が暴露します」）",
+        "number_type": "完了率76%（例：「月収が3倍になった5つの方法」）"
+      },
+      "first_3_seconds": "リール・カルーセルともに冒頭3秒で視聴継続率が決まる"
+    },
+
+    "algorithm_insights_2026": {
+      "new_account_boost": "作成90日以内のアカウントは最初の10〜20投稿に通常の約2倍のリーチが付与される",
+      "authenticity_weight": "真正性（オーセンティシティ）とシェアがアルゴリズムの最重要指標に",
+      "carousel_advantage": "カルーセルに音楽をつけるとリールタブにも表示される（リーチ2倍効果）",
+      "views_metric": "2025年末から「ビュー数」が統一指標に変更。リーチ×視聴維持率が重視される"
+    }
+  },
+
+  "actionable_insights_for_this_account": {
+    "differentiation": "競合は「副業ノウハウ」が多い。「金融機関20年×AI」の組み合わせは希少性が高い。数字の信頼性（年収・運用実績）を前面に出す",
+    "content_gaps": [
+      "FP・元バンカー視点の本格的な資産形成ノウハウ（競合が少ないゾーン）",
+      "AI副業と投資を組み合わせた『攻め（副業）×守り（投資）』の複合戦略",
+      "具体的な月次収支レポート公開（透明性でフォロワーの信頼獲得）"
+    ],
+    "caption_improvements": [
+      "冒頭に「銀行員20年が教える〜」「元メガバンク勤務が暴露〜」など肩書フックを積極活用",
+      "毎投稿に1つ以上の具体的数字（金額・期間・利率）を入れる",
+      "カルーセル1枚目のキャッチコピーは15字以内に絞る"
+    ],
+    "image_style_recommendation": "ネイビー×ゴールドをベースに、1枚目は大見出しのみ。カルーセル2〜7枚でデータ・グラフを使った解説。統一感が信頼感を生む",
+    "hashtag_recommendation": "2026年ルールに合わせ5個に絞る。#AI副業・#資産形成・曜日テーマに合わせた1〜2個のニッチタグ構成を推奨",
+    "posting_frequency_recommendation": "週5〜6回（毎日1投稿）が競合平均。カルーセル中心でリール週2本を混ぜるハイブリッド戦略"
+  }
+}

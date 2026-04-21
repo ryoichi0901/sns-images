@@ -1,0 +1,9 @@
+/Library/Developer/CommandLineTools/usr/bin/python3: can't open file 'post.py': [Errno 1] Operation not permitted
+/Users/watanaberyouichi/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Cloudinary URL: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1776470476/vs8vu4zhkoxhm7dswo2o.jpg
+Posted: 18582021508043334
+/Users/watanaberyouichi/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+Cloudinary URL: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1776729608/n90w2m9vqb2hj5ymdny7.jpg
+Posted: 17931292602071761

@@ -1,0 +1,93 @@
+{
+  "_meta": {
+    "description": "競合分析（ponkotsu_money / mikimiki1021 / riko_insta_ai）から導出した5種類のバズりやすい投稿テンプレート",
+    "buzz_priority_2026": ["シェア", "保存", "コメント", "いいね"],
+    "hook_completion_rates": {
+      "question_type": "82%",
+      "surprise_type": "79%",
+      "number_type": "76%"
+    }
+  },
+
+  "templates": {
+    "banker_secret": {
+      "id": "banker_secret",
+      "name": "元バンカー暴露型",
+      "description": "20年のキャリアを権威として使い、業界の裏側・知られていない事実を告白スタイルで公開する。mikimiki1021の権威フック × ponkotsu_moneyの告白形式。",
+      "target_emotion": "驚き・特別感（インサイダー情報への好奇心）",
+      "buzz_mechanism": "「銀行員しか知らない情報」という希少性 → 保存＋シェア",
+
+      "hook_instruction": "「元メガバンク行員が言いにくかった○つの真実」「銀行員20年が初めて話す〜」「金融機関の中の人だから知っている〜」のように、元バンカーという肩書を冒頭15字以内で打ち出す",
+      "body_instruction": "金融業界の内側から見えた事実・慣行・裏側を告白形式で3〜5点列挙。「実は〜」「内緒の話ですが〜」「当時は言えなかった〜」の表現を使い、インサイダー感を演出する",
+      "cta_instruction": "「学校では教えてくれない話なので保存推奨」「こういう話をもっと聞きたい方はフォロー」",
+      "carousel_structure": "1枚目:衝撃の見出し（15字以内）/ 2〜5枚目:各真実を1枚1点で解説 / 最終枚:まとめ＋CTA",
+      "image_style_addon": "navy blue and gold, bank vault or official financial documents, authoritative and exclusive feeling",
+      "hashtag_hint": ["#元銀行員が教える", "#金融の裏側", "#お金の真実", "#銀行員20年", "#金融リテラシー"]
+    },
+
+    "income_report": {
+      "id": "income_report",
+      "name": "月収公開リアリティ型",
+      "description": "副業・投資の実際の収益を包み隠さず公開。ponkotsu_money × riko_insta_aiの透明性マーケティング。失敗・苦労も含めたリアルさが信頼を生む。",
+      "target_emotion": "共感・親近感（自分もできるかもという希望）",
+      "buzz_mechanism": "リアルな数字公開 → 「自分にも関係ある」共感 → 保存・コメント",
+
+      "hook_instruction": "「今月のAI副業収入を全公開します💰」「正直に話します。先月の副業収入と失敗を〜」のように、収益の具体的な金額または「全公開」「正直に」というワードを冒頭に置く",
+      "body_instruction": "月の収益内訳（アフィリエイト○円・コンサル○円など）、うまくいったこと、失敗したこと、来月の改善策を時系列・箇条書きで。失敗や苦労を隠さないことで信頼性を担保する",
+      "cta_instruction": "「同じように副業やってる人、コメントで収益教えて！」「毎月公開するのでフォローしておいて」",
+      "carousel_structure": "1枚目:今月の合計収益（大きい数字） / 2枚目:内訳グラフ / 3〜4枚目:成功・失敗エピソード / 最終枚:来月の目標＋CTA",
+      "image_style_addon": "monthly income dashboard, bar chart and pie chart, warm gold and white tones, transparent and honest aesthetic",
+      "hashtag_hint": ["#副業月収", "#収益公開", "#AI副業実績", "#副業リアル", "#月収報告"]
+    },
+
+    "step_guide": {
+      "id": "step_guide",
+      "name": "完全ステップガイド型",
+      "description": "初心者でも今日からできる具体的なステップをナンバリングして提供。mikimiki1021 × riko_insta_aiのHow-toスタイル。「保存して後で実践しよう」を誘発する。",
+      "target_emotion": "「私にもできそう」という自己効力感",
+      "buzz_mechanism": "今すぐ実践できる具体性 → 保存率3%超えを狙う",
+
+      "hook_instruction": "「今すぐできる！○○の○ステップ」「初心者でも○分で始められる〜」「これだけやれば月○万円になる完全ガイド」のように、ステップ数と難易度の低さを冒頭に",
+      "body_instruction": "STEP1〜STEP5（最大）を番号付きで。各ステップは「何をするか（動詞）」「なぜするか（理由）」「具体的にどうするか（ツール名・数字）」の3要素を含める。難しい専門用語は使わない",
+      "cta_instruction": "「このステップ、保存して今週中に実践してみて！」「実践した結果はコメントで教えて📝」",
+      "carousel_structure": "1枚目:全体像（○ステップで○○達成） / 2〜6枚目:各ステップを1枚ずつ / 最終枚:完了後の成果イメージ＋CTA",
+      "image_style_addon": "step by step roadmap illustration, numbered path with checkmarks, clean white and teal, progress and achievement theme",
+      "hashtag_hint": ["#初心者向け", "#副業のはじめ方", "#AI副業入門", "#資産形成の始め方", "#お金の勉強"]
+    },
+
+    "comparison": {
+      "id": "comparison",
+      "name": "知ってる人vs知らない人型",
+      "description": "「資産が増える人 vs 増えない人」の対比形式。2026年アルゴリズムの最重要指標「シェア」を最大化。「友達に教えたい」「自分はどっち？」という心理を刺激する。",
+      "target_emotion": "自己診断・比較心理（自分はどっちか確認したい）",
+      "buzz_mechanism": "対比による自己投影 → 「これ友達に見せたい」シェア誘発",
+
+      "hook_instruction": "「資産が増える人と減る人の決定的な違い」「お金持ちがやっていること vs 普通の人がやっていること」「知っている人と知らない人では○年後に○万円の差」のような対比フックを冒頭に",
+      "body_instruction": "「✅ 知ってる人 / ❌ 知らない人」の対比を3〜5セット。各セットは同じ状況での行動の違いを具体的に。最後に「あなたはどっち？」と問いかけて自己診断を促す",
+      "cta_instruction": "「あなたはどっち？コメントで教えて！」「知らない人に教えてあげてシェア＆保存推奨📌」",
+      "carousel_structure": "1枚目:衝撃の対比見出し / 2〜5枚目:各対比項目（左:知ってる人 右:知らない人） / 最終枚:まとめ「今すぐ変えられることは？」＋CTA",
+      "image_style_addon": "split screen comparison design, left side successful gold and right side struggling gray, clean infographic style, contrast and clarity",
+      "hashtag_hint": ["#お金持ちの習慣", "#資産形成の違い", "#知らないと損", "#お金の習慣", "#投資マインド"]
+    },
+
+    "myth_busting": {
+      "id": "myth_busting",
+      "name": "常識破壊型",
+      "description": "よくある金融・副業の「常識」を元バンカーの権威で否定し、正しい知識を提供。驚き型フック（完了率79%）を活用。「え、知らなかった！」がシェアを生む。",
+      "target_emotion": "驚き・後悔→正しい知識を得た達成感",
+      "buzz_mechanism": "意外性・反常識 → 「これ嘘だったの？」シェア誘発 + ノウハウ保存",
+
+      "hook_instruction": "「実はこれ、全部間違いでした」「○○は嘘だと元銀行員がバラします」「やってはいけない！間違ったお金の常識○選」のように、「間違い」「嘘」「やってはいけない」の否定ワードを冒頭に",
+      "body_instruction": "よくある誤解・常識を3〜5つ列挙。各項目を「❌ よくある誤解」→「✅ 正しい知識」の形式で。銀行員・FPとしての専門知識を権威として使い、「なぜ間違いなのか」の理由を具体的な数字・事例で説明",
+      "cta_instruction": "「この情報、知らないと損するので絶対保存して」「他にも知りたい常識破壊ネタあったらコメントで！」",
+      "carousel_structure": "1枚目:「全部嘘でした」衝撃の見出し / 2〜5枚目:各誤解→正解を1枚ずつ / 最終枚:「正しい知識を持った人だけが資産形成できる」まとめ＋CTA",
+      "image_style_addon": "myth busting concept, red X marks transforming to green checkmarks, dark background with bright accents, truth and revelation theme",
+      "hashtag_hint": ["#お金の常識を疑え", "#金融の嘘", "#知らないと損", "#お金の真実", "#元銀行員が暴露"]
+    }
+  },
+
+  "rotation_rule": {
+    "description": "日付の通し番号（date.toordinal()）% 5 でテンプレートを自動ローテーション。同じテンプレートが連続しないよう管理。",
+    "order": ["banker_secret", "income_report", "step_guide", "comparison", "myth_busting"]
+  }
+}
