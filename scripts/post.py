@@ -71,20 +71,6 @@ def post(img_url, cap):
     r2.raise_for_status()
     return r2.json()["id"]
 
-def main():
-    today = datetime.date.today()
-    c = gen_caption()
-    img = gen_image(c["image_prompt"], today.strftime("%Y%m%d"))
-    url = upload(img)
-    pid = post(url, c["caption"])
-    tid = post_threads(url, c["caption"])
-    print("Posted IG:", pid, "Threads:", tid)
-    with open(LF,"a",encoding="utf-8") as f:
-        f.write(json.dumps({"date":str(today),"id":pid},ensure_ascii=False)+"\n")
-
-if __name__ == "__main__":
-    main()
-
 def post_threads(img_url, cap):
     THREADS_USER_ID = os.getenv("THREADS_USER_ID")
     THREADS_TOKEN   = os.getenv("THREADS_ACCESS_TOKEN")
@@ -110,3 +96,17 @@ def post_threads(img_url, cap):
     )
     r2.raise_for_status()
     return r2.json()["id"]
+
+def main():
+    today = datetime.date.today()
+    c = gen_caption()
+    img = gen_image(c["image_prompt"], today.strftime("%Y%m%d"))
+    url = upload(img)
+    pid = post(url, c["caption"])
+    tid = post_threads(url, c["caption"])
+    print("Posted IG:", pid, "Threads:", tid)
+    with open(LF,"a",encoding="utf-8") as f:
+        f.write(json.dumps({"date":str(today),"id":pid},ensure_ascii=False)+"\n")
+
+if __name__ == "__main__":
+    main()
