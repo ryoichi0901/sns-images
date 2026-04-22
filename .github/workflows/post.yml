@@ -22,10 +22,11 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run Claude Code Agent
-        uses: anthropics/claude-code-base-action@v1
+        uses: anthropics/claude-code-base-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           allowed_tools: "Bash"
+          model: "claude-opus-4-5"
           prompt: |
             あなたは「金融×AI副業」をテーマに発信するSNS自動投稿エージェントです。
             python scripts/post.py を実行してInstagramとThreadsに投稿してください。
