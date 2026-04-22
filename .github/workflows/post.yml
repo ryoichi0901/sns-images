@@ -2,8 +2,11 @@ name: SNS Auto Post
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # 毎日21:00 JST (UTC 12:00)
-  workflow_dispatch:       # 手動実行も可能
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   post:
@@ -22,13 +25,15 @@ jobs:
       - name: Run post script
         env:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_BUSINESS_ID: ${{ secrets.INSTAGRAM_BUSINESS_ID }}
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_BUSINESS_ID }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           GH_REPO: ${{ secrets.GH_REPO }}
           GH_BRANCH: main
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
