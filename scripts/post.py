@@ -39,7 +39,7 @@ def gen_image(prompt, ds):
 
 def upload(path):
     import base64
-    GH_TOKEN = os.getenv("GITHUB_TOKEN")
+    GH_TOKEN = os.getenv("GH_TOKEN")
     GH_REPO  = "ryoichi0901/sns-images"
     GH_BRANCH = "main"
     filename = path.name
