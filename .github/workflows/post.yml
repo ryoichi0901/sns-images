@@ -2,9 +2,9 @@ name: SNS Auto Post
 
 on:
   schedule:
-    - cron: '0 22 * * *'  # 7:00 JST Threadsのみ
-    - cron: '0 3 * * *'   # 12:00 JST Threadsのみ
-    - cron: '0 12 * * *'  # 21:00 JST Instagram+Threads
+    - cron: '0 22 * * *'
+    - cron: '0 3 * * *'
+    - cron: '0 12 * * *'
   workflow_dispatch:
 
 jobs:
@@ -28,24 +28,20 @@ jobs:
           allowed_tools: "Bash"
           model: "claude-opus-4-5"
           prompt: |
-          あなたは「金融×AI副業」専門のSNS投稿エージェントです。以下のステップを順番に実行してください。
+            You are an SNS posting agent for a Japanese finance x AI side business account.
+            Execute the following steps in order.
 
-            ## Step 1: 投稿型を選定
-            以下の型から時間帯に合わせて1つ選ぶ：
-            - 共感型・暴露型・数字型・行動型・トレンド型
-
-            ## Step 2: 投稿文を生成
-            - 冒頭は共感フレーズ
-            - 元銀行員視点の数字・事実を1つ
-            - 具体的な行動提案（3分でできること）
-            - コメントを促す問いかけで締める
-            - 絵文字2〜3個、ハッシュタグ5個（#AI副業 #資産形成 #副業収入 #金融リテラシー必須）
-
-            ## Step 3: 自己採点
-            100点満点で採点。70点未満なら再生成。
-
-            ## Step 4: 投稿実行
-            python scripts/post.py を実行して結果を報告する。
+            Step 1: Choose a post type from: empathy, reveal, numbers, action, trend.
+            Step 2: Write a Threads post in Japanese following these rules:
+            - Start with a relatable question or empathy phrase
+            - Include one specific number or fact from a banker perspective
+            - Include a specific 3-minute action the reader can take
+            - End with a question encouraging comments
+            - Use 2-3 emojis
+            - Add 5 hashtags at the end including #AI副業 #資産形成 #副業収入 #金融リテラシー
+            Step 3: Score the post out of 100. If below 70, regenerate.
+            Step 4: Run this command to post: python scripts/post.py
+            Report the post content and score after completion.
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
