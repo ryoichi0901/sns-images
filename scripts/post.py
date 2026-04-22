@@ -38,20 +38,27 @@ def gen_image(prompt, ds):
     raise Exception("Image error:" + str(r.status_code))
 
 def upload(path):
-    import hashlib, time as t
-    CN = os.getenv("CLOUDINARY_CLOUD_NAME")
-    CK = os.getenv("CLOUDINARY_API_KEY")
-    CS = os.getenv("CLOUDINARY_API_SECRET")
-    timestamp = str(int(t.time()))
-    sig = hashlib.sha1(f"timestamp={timestamp}{CS}".encode()).hexdigest()
-    with open(path,"rb") as f:
-        r = requests.post(f"https://api.cloudinary.com/v1_1/{CN}/image/upload",
-            data={"api_key":CK,"timestamp":timestamp,"signature":sig},
-            files={"file":f},timeout=60)
-    r.raise_for_status()
-    url = r.json()["secure_url"]
-    print("Cloudinary URL:", url)
-    return url
+    import base64
+    GH_TOKEN = os.getenv("GITHUB_TOKEN")
+    GH_REPO  = "ryoichi0901/sns-images"
+    GH_BRANCH = "main"
+    filename = path.name
+    gh_path  = filename
+    raw_url  = f"https://raw.githubusercontent.com/{GH_REPO}/{GH_BRANCH}/{filename}"
+    api_url  = f"https://api.github.com/repos/{GH_REPO}/contents/{gh_path}"
+    headers  = {"Authorization": f"token {GH_TOKEN}", "Accept": "application/vnd.github+json"}
+    sha = None
+    r = requests.get(api_url, headers=headers, timeout=30)
+    if r.status_code == 200:
+        sha = r.json().get("sha")
+    content = base64.b64encode(path.read_bytes()).decode()
+    body = {"message": f"Add {filename}", "content": content, "branch": GH_BRANCH}
+    if sha:
+        body["sha"] = sha
+    r2 = requests.put(api_url, headers=headers, json=body, timeout=60)
+    r2.raise_for_status()
+    print("GitHub raw URL:", raw_url)
+    return raw_url
 
 def post(img_url, cap):
     r = requests.post("https://graph.facebook.com/v25.0/"+II+"/media",
