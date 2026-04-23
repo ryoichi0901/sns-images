@@ -1,2 +1,5 @@
 .env
 *.pyc
+node_modules/
+output/
+.DS_Store
