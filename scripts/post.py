@@ -161,7 +161,7 @@ def main():
         img = gen_image(c["image_prompt"], today.strftime("%Y%m%d"))
         url = upload(img)
         pid = post(url, c["caption"])
-        tid = post_threads(url, c["caption"])
+        tid = post_threads_text_only()
         print(f"Posted IG: {pid} Threads: {tid}")
         with open(LF,"a",encoding="utf-8") as f:
             f.write(json.dumps({"date":today.strftime("%Y-%m-%d"),"id":pid},ensure_ascii=False)+"\n")
