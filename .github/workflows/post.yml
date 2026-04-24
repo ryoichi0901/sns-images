@@ -75,3 +75,26 @@ jobs:
           CLOUDINARY_API_SECRET:  ${{ secrets.CLOUDINARY_API_SECRET }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
           INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
+
+      # 07:00 JST のみ: Instagram/Threads の金融・副業系投稿を検索し、
+      # 銀行員目線のコメント文案を生成して logs/comment_targets_YYYYMMDD.md に保存する。
+      # git push でリポジトリに自動コミットされるため git pull で確認できる。
+      # 実際のコメント投稿は手動で行う（自動送信なし）。
+      - name: Research comment targets
+        if: github.event.schedule == '0 22 * * *' || github.event.inputs.mode == 'full'
+        run: python3 scripts/research_comments.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Commit research output
+        if: github.event.schedule == '0 22 * * *' || github.event.inputs.mode == 'full'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add logs/comment_targets_*.md
+          if git diff --cached --quiet; then
+            echo "変更なし: コミットをスキップします"
+          else
+            git commit -m "chore: daily comment research $(date -u +%Y-%m-%d)"
+            git push
+          fi

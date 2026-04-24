@@ -5,3 +5,4 @@ cloudinary
 Pillow
 anthropic
 pytz
+duckduckgo-search
