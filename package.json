@@ -1,0 +1,29 @@
+{
+  "name": "ryo-sns-auto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "render-short": "node scripts/render-short.js",
+    "render-short:dry": "node scripts/render-short.js --dry-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryoichi0901/sns-images.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ryoichi0901/sns-images/issues"
+  },
+  "homepage": "https://github.com/ryoichi0901/sns-images#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
+    "@remotion/cli": "^4.0.451",
+    "puppeteer": "^24.42.0",
+    "remotion": "^4.0.451"
+  }
+}

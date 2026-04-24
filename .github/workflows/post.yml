@@ -2,14 +2,20 @@ name: SNS Auto Post
 
 on:
   schedule:
-    - cron: '0 22 * * *'
-    - cron: '0 3 * * *'
-    - cron: '0 12 * * *'
+    - cron: '0 22 * * *'   # 07:00 JST  Threads テキストのみ
+    - cron: '0 3 * * *'    # 12:00 JST  Threads テキストのみ
+    - cron: '0 12 * * *'   # 21:00 JST  Instagram + Threads + Reels（Pillow+FFmpeg）
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'threads-only または full（Instagram + Threads + Reels）'
+        required: false
+        default: 'threads-only'
 
 jobs:
   post:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -18,39 +24,40 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          # FFmpeg は ubuntu-latest に標準搭載済み
+          # Pillow での日本語テキスト描画に使用するフォント
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Claude Code Agent
-        uses: anthropics/claude-code-base-action@beta
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_tools: "Bash"
-          model: "claude-opus-4-5"
-          prompt: |
-            You are an SNS posting agent for a Japanese finance x AI side business account.
-            Execute the following steps in order.
+      - name: Determine post mode
+        id: mode
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          DISPATCH="${{ github.event.inputs.mode }}"
 
-            Step 1: Choose a post type from: empathy, reveal, numbers, action, trend.
-            Step 2: Write a Threads post in Japanese following these rules:
-            - Start with a relatable question or empathy phrase
-            - Include one specific number or fact from a banker perspective
-            - Include a specific 3-minute action the reader can take
-            - End with a question encouraging comments
-            - Use 2-3 emojis
-            - Add 5 hashtags at the end including #AI副業 #資産形成 #副業収入 #金融リテラシー
-            Step 3: Score the post out of 100. If below 70, regenerate.
-            Step 4: Run this command to post: python scripts/post.py
-            Report the post content and score after completion.
+          if [ "$SCHEDULE" = "0 12 * * *" ] || [ "$DISPATCH" = "full" ]; then
+            echo "cmd=python3 scripts/run.py --platforms ig th --reels" >> $GITHUB_OUTPUT
+            echo "label=21:00 フル投稿（Instagram + Threads + Reels）" >> $GITHUB_OUTPUT
+          else
+            echo "cmd=python3 scripts/run.py --platforms th" >> $GITHUB_OUTPUT
+            echo "label=Threads テキストのみ" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run post
+        run: |
+          echo "▶ ${{ steps.mode.outputs.label }}"
+          ${{ steps.mode.outputs.cmd }}
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
+          CLOUDINARY_CLOUD_NAME:  ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY:     ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET:  ${{ secrets.CLOUDINARY_API_SECRET }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_BUSINESS_ID: ${{ secrets.INSTAGRAM_BUSINESS_ID }}
-          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
-          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
-          STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GH_REPO: ${{ secrets.GH_REPO }}
-          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
+          THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}

@@ -141,6 +141,75 @@ def publish_carousel_to_instagram(
     return post_id
 
 
+def upload_video_to_cloudinary(video_path: Path, cloud_name: str, api_key: str, api_secret: str) -> str:
+    """CloudinaryにMP4動画をアップロードし、公開URLを返す"""
+    timestamp = str(int(time.time()))
+    sig_base = f"timestamp={timestamp}{api_secret}"
+    signature = hashlib.sha1(sig_base.encode()).hexdigest()
+
+    with open(video_path, "rb") as f:
+        r = requests.post(
+            f"https://api.cloudinary.com/v1_1/{cloud_name}/video/upload",
+            data={"api_key": api_key, "timestamp": timestamp, "signature": signature},
+            files={"file": f},
+            timeout=300,
+        )
+    r.raise_for_status()
+    url = r.json()["secure_url"]
+    print(f"[PostAgent] 動画Cloudinaryアップロード完了: {url}")
+    return url
+
+
+def publish_reels_to_instagram(video_url: str, caption: str, ig_user_id: str, access_token: str) -> str:
+    """
+    Instagram Reels を投稿し、投稿IDを返す。
+    Step1: Reelsコンテナ作成
+    Step2: 処理完了をポーリング確認（最大180秒）
+    Step3: 公開
+    """
+    r1 = requests.post(
+        f"https://graph.facebook.com/v25.0/{ig_user_id}/media",
+        data={
+            "media_type": "REELS",
+            "video_url": video_url,
+            "caption": caption,
+            "share_to_feed": "true",
+            "access_token": access_token,
+        },
+        timeout=60,
+    )
+    if not r1.ok:
+        raise RuntimeError(f"Reelsコンテナ作成失敗 ({r1.status_code}): {r1.text}")
+    container_id = r1.json()["id"]
+    print(f"[PostAgent] Reelsコンテナ作成: {container_id}")
+
+    # 動画処理完了をポーリング（最大180秒）
+    for i in range(18):
+        time.sleep(10)
+        status_r = requests.get(
+            f"https://graph.facebook.com/v25.0/{container_id}",
+            params={"fields": "status_code", "access_token": access_token},
+            timeout=30,
+        )
+        status_code = status_r.json().get("status_code", "")
+        print(f"[PostAgent] Reels処理状態: {status_code} ({(i+1)*10}秒経過)")
+        if status_code == "FINISHED":
+            break
+        if status_code in ("ERROR", "EXPIRED"):
+            raise RuntimeError(f"Reels処理失敗: {status_code}")
+
+    r3 = requests.post(
+        f"https://graph.facebook.com/v25.0/{ig_user_id}/media_publish",
+        data={"creation_id": container_id, "access_token": access_token},
+        timeout=30,
+    )
+    if not r3.ok:
+        raise RuntimeError(f"Reels公開失敗 ({r3.status_code}): {r3.text}")
+    post_id = r3.json()["id"]
+    print(f"[PostAgent] Instagram Reels投稿完了: {post_id}")
+    return post_id
+
+
 def get_recent_insights(ig_user_id: str, access_token: str, limit: int = 5) -> list[dict]:
     """直近の投稿インサイトを取得（フォロワーリーチ・インプレッション）"""
     r = requests.get(

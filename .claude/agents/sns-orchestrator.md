@@ -56,43 +56,209 @@ linktree = get_linktree_url()  # → LINKTREE_URL の値
 ## 実行フロー
 
 ### フルオート実行（日次）
+
+#### フェーズ1: リサーチ（毎回必須・並列実行）
+
+competitor-researcher と trend-analyzer を **Agent ツールで並列起動** し、結果を `logs/research_context_YYYYMMDD.json` に保存する。
+
+**competitor-researcher への指示例**:
 ```
-【フェーズ1: リサーチ（並列）】
-  ├─ competitor-researcher: 競合バズ投稿の確認
-  └─ trend-analyzer: 今日のトレンドキーワード
-
-【フェーズ2: 戦略立案】
-  └─ content-strategist
-     → テーマキー（nisa / ai_side_job / ...）を決定
-     → テンプレートID・フック方向性を出力
-
-【フェーズ3: コンテンツ生成（並列）】
-  ├─ carousel-creator: 7枚スライド構成
-  │    └─ image-prompt-generator: 画像プロンプト最適化
-  ├─ caption-writer: テーマキーを受け取り適切なアフィリリンクをCTAに挿入
-  └─ short-video-scripter: Shorts/Reels台本（週2〜3回）
-
-【フェーズ4: 投稿（順次）】
-  ├─ instagram-poster:
-  │    python3 scripts/run.py --carousel --template {id}
-  │    ※ Instagramキャプションに「プロフリンクから👇」CTA含む
-  ├─ threads-poster: theme= 引数でテーマ別リンクを自動付与
-  └─ twitter-poster: theme= 引数でテーマ別URLを自動付与
-
-【フェーズ5: 分析】
-  └─ analytics-reporter → content-improver
+AI副業×資産形成ジャンル（Instagram/X/Threads/TikTok）で
+過去7日以内のバズ投稿・高エンゲージメント投稿・高インプレッション投稿を10件以上分析し、
+以下のJSON形式で /Users/watanaberyouichi/Documents/ryo-sns-auto/logs/research_context_YYYYMMDD.json に保存してください:
+{
+  "date": "YYYY-MM-DD",
+  "competitor_analysis": {
+    "top_buzz_posts": [{"platform":"..","hook":"..","format":"..","key_elements":[".."],"engagement_hint":".."}],
+    "buzz_patterns": "バズる投稿の共通パターンまとめ（200字以内）",
+    "high_engagement_hooks": ["フック文1","フック文2","フック文3"],
+    "effective_hashtags": ["#tag1","#tag2"]
+  }
+}
 ```
+
+**trend-analyzer への指示例**:
+```
+AI副業×資産形成ジャンルの今週のトレンドを分析し、
+上記 research_context_YYYYMMDD.json に以下フィールドを追加・マージして保存してください:
+{
+  "trend_analysis": {
+    "trending_keywords": ["KW1","KW2","KW3","KW4","KW5"],
+    "hot_topics": ["注目トピック1","注目トピック2","注目トピック3"],
+    "algorithm_tips": "今週のアルゴリズム傾向（100字以内）",
+    "recommended_formats": ["carousel","reel"]
+  },
+  "strategic_recommendations": {
+    "hook_direction": "フックの推奨方向性（例: 問いかけ型・数字型）",
+    "content_angle": "コンテンツの切り口（例: 失敗体験談・比較検証）"
+  }
+}
+```
+
+**JSONが保存されると content_agent.py が自動読込する**（`_load_research_context()` が実行日のファイルを自動検出）。
+
+#### フェーズ2: 戦略立案
+```
+└─ content-strategist
+   → テーマキー（nisa / ai_side_job / ...）を決定
+   → テンプレートID・フック方向性を出力（リサーチ結果を踏まえて）
+```
+
+#### フェーズ3: コンテンツ生成 → ファイル保存 → 投稿
+
+**重要**: run.py は `/tmp/today_content.json` が存在すればそれを優先使用し、AIによる独自生成を行わない。
+必ずこのフェーズでファイルを作成してから run.py を呼ぶこと。
+
+**ステップ3-1: carousel-creator でスライド生成**
+
+carousel-creator サブエージェントに以下を指示する:
+```
+曜日テーマ「{theme}」・テンプレート「{template_id}」で
+Instagram カルーセル7枚を生成してください。
+各スライドは以下のJSON形式で返してください:
+[
+  {"slide_num": 1, "headline": "15字以内", "body": "80字以内", "image_prompt": "英語50語以内"},
+  ...
+]
+スライド構成: 1=フック / 2=問題提起 / 3-5=解決策 / 6=実績 / 7=CTA
+```
+
+**ステップ3-2: caption-writer でプラットフォームキャプション生成**
+
+caption-writer サブエージェントに以下を指示する:
+```
+テーマ「{theme}」・スライド内容をもとに以下を生成してください:
+- caption: Instagram用キャプション（500字以内、#ハッシュタグ5個末尾）
+- threads_text: Threads用テキスト（300字以内、#ハッシュタグ3個末尾）
+- tweet: X用ツイート（200字以内、#ハッシュタグ2個）
+- topic_summary: テーマを一言で（日本語）
+- image_prompt: 表紙スライド用英語プロンプト
+```
+
+**ステップ3-3: /tmp/today_content.json に保存（必須）**
+
+carousel-creator と caption-writer の出力を以下のスキーマに統合し、
+Write ツールで `/tmp/today_content.json` に保存する:
+
+```json
+{
+  "caption": "Instagram用キャプション",
+  "threads_text": "Threads用テキスト",
+  "tweet": "X用ツイート",
+  "image_prompt": "表紙スライド用英語プロンプト（英語）",
+  "alt_text": "画像説明（日本語50字以内）",
+  "topic_summary": "トピック一言説明",
+  "template_used": "{template_id}",
+  "carousel_slides": [
+    {"slide_num": 1, "headline": "見出し", "body": "本文", "image_prompt": "英語プロンプト"},
+    {"slide_num": 2, "headline": "見出し", "body": "本文", "image_prompt": "英語プロンプト"},
+    {"slide_num": 3, "headline": "見出し", "body": "本文", "image_prompt": "英語プロンプト"},
+    {"slide_num": 4, "headline": "見出し", "body": "本文", "image_prompt": "英語プロンプト"},
+    {"slide_num": 5, "headline": "見出し", "body": "本文", "image_prompt": "英語プロンプト"},
+    {"slide_num": 6, "headline": "見出し", "body": "本文", "image_prompt": "英語プロンプト"},
+    {"slide_num": 7, "headline": "見出し", "body": "本文", "image_prompt": "英語プロンプト"}
+  ]
+}
+```
+
+保存確認:
+```bash
+python3 -c "import json; d=json.load(open('/tmp/today_content.json')); print(f'スライド数: {len(d[\"carousel_slides\"])}枚 / トピック: {d[\"topic_summary\"]}')"
+```
+
+**ステップ3-4: run.py で画像生成・Cloudinaryアップロード・投稿**
+
+```bash
+python3 scripts/run.py --platforms ig th
+```
+
+run.py が `/tmp/today_content.json` を自動読み込みし、コンテンツ生成をスキップして
+画像生成 → Cloudinaryアップロード → Instagram + Threads 投稿まで実行する。
+
+**ショート動画が必要な場合**:
+```bash
+python3 scripts/run.py --platforms ig th --short-video
+```
+
+#### フェーズ4: 投稿後クリーンアップ
+```bash
+# 一時ファイルを削除（次回の独自生成フォールバックに影響しないよう）
+rm -f /tmp/today_content.json
+```
+
+#### フェーズ5: 分析・改善ログ
+```
+└─ analytics-reporter → content-improver
+   → ~/Documents/Obsidian Vault/SNS自動投稿/改善ログ.md に追記
+```
+
+### コンテンツ生成における全プラットフォーム統一仕様
+
+| 仕様 | 設定値 |
+|---|---|
+| Instagram | カルーセル7枚固定、共感→ストーリー→CTA |
+| Threads | 共感→ストーリー→CTA 3部構成 |
+| ショート動画 | empathy→story1/2/3→cta 5シーン |
+| トーン | 等身大の語りかけ口調（例:「AI副業って、もう遅いのかな？🤔」） |
+| 画像 | 毎回ランダムシード + 7種スライドスタイル |
+
+### ショート動画フロー（「ショート動画を投稿して」トリガー）
+```
+【ステップ1: 台本生成】
+  └─ short-video-scripter
+     → 今日の曜日テーマ（config/themes.json）に沿った60秒台本を生成
+     → logs/script_YYYYMMDD.json として保存
+        形式: { title, thumbnail, scenes:[{id,start,end,voice,telop}], hashtags }
+
+【ステップ2: MP4レンダリング（Remotion）】
+  └─ node scripts/render-short.js --script logs/script_YYYYMMDD.json
+     → 縦型 1080×1920 / 30fps / H.264 でレンダリング
+     → output/short_YYYYMMDD.mp4 に出力
+     ※ ドライランで確認: --dry-run フラグを追加
+
+【ステップ3: 投稿（並列）】
+  ├─ instagram-poster（Reels）:
+  │    output/short_YYYYMMDD.mp4 を Reels として投稿
+  │    キャプションに「プロフリンクから👇」CTA + Reels用ハッシュタグを付与
+  └─ youtube-uploader（Shorts）:
+       output/short_YYYYMMDD.mp4 を YouTube Shorts としてアップロード
+       タイトル・説明文・タグは台本JSONの title / hashtags.youtube を使用
+       ※ #Shorts タグを必ず含める
+```
+
+#### ショート動画フロー 実行コマンド
+```bash
+# ステップ2のみ手動実行（ドライラン）
+node scripts/render-short.js --script logs/script_YYYYMMDD.json --dry-run
+
+# ステップ2のみ手動実行（本番）
+node scripts/render-short.js --script logs/script_YYYYMMDD.json
+
+# 出力先を明示指定する場合
+node scripts/render-short.js --script logs/script_YYYYMMDD.json --out output/my_short.mp4
+```
+
+#### ショート動画フロー エラー対応
+| ステップ | エラー | 対応 |
+|---|---|---|
+| Remotionレンダー | JSX解析エラー | remotion/ShortVideo.jsx を確認（自動生成済み） |
+| Remotionレンダー | OOM / 処理遅延 | `--concurrency=1` を render コマンドに追加 |
+| Instagram Reels | 動画フォーマットエラー | H.264 / MP4 であることを確認、`--codec=h264` は固定済み |
+| YouTube Shorts | 縦型判定されない | 1080×1920 の縦型比率と #Shorts タグが必要（設定済み） |
 
 ### 軽量実行（即座に投稿）
 ```bash
-# カルーセル（推奨）
-python3 scripts/run.py --carousel
-
-# 単枚
+# カルーセル7枚（デフォルト）
 python3 scripts/run.py
 
-# ドライランで確認
-python3 scripts/run.py --carousel --dry-run
+# ショート動画台本も同時生成
+python3 scripts/run.py --short-video
+
+# ドライランで内容確認
+python3 scripts/run.py --dry-run
+
+# 単枚に切り替え
+python3 scripts/run.py --no-carousel
 ```
 
 ## 投稿計画の立案時に必ず含める項目
