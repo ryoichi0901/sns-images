@@ -4,7 +4,8 @@ on:
   schedule:
     - cron: '0 22 * * *'   # 07:00 JST  Threads テキストのみ
     - cron: '0 3 * * *'    # 12:00 JST  Threads テキストのみ
-    - cron: '0 12 * * *'   # 21:00 JST  Instagram + Threads + Reels（Pillow+FFmpeg）
+    # 21:00 JST は Mac cron (cron_21.sh) が担当（sns-orchestrator / Claude CLI が必要なため）
+    # - cron: '0 12 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -37,12 +38,11 @@ jobs:
       - name: Determine post mode
         id: mode
         run: |
-          SCHEDULE="${{ github.event.schedule }}"
           DISPATCH="${{ github.event.inputs.mode }}"
 
-          if [ "$SCHEDULE" = "0 12 * * *" ] || [ "$DISPATCH" = "full" ]; then
+          if [ "$DISPATCH" = "full" ]; then
             echo "cmd=python3 scripts/run.py --platforms ig th --reels" >> $GITHUB_OUTPUT
-            echo "label=21:00 フル投稿（Instagram + Threads + Reels）" >> $GITHUB_OUTPUT
+            echo "label=手動フル投稿（Instagram + Threads + Reels）" >> $GITHUB_OUTPUT
           else
             echo "cmd=python3 scripts/run.py --platforms th" >> $GITHUB_OUTPUT
             echo "label=Threads テキストのみ" >> $GITHUB_OUTPUT
@@ -61,3 +61,17 @@ jobs:
           INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
           THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}
+
+      # 07:00 JST のみ: 当日 21:00 JST に自動公開される Reels 予約投稿を作成する。
+      # published=false + scheduled_publish_time で Instagram にコンテナを登録し、
+      # Mac がスリープ中でも時刻になったら Instagram サーバーが自動公開する。
+      - name: Schedule Reels for 21:00 JST
+        if: github.event.schedule == '0 22 * * *' || github.event.inputs.mode == 'full'
+        run: python3 scripts/schedule_reels.py
+        env:
+          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
+          CLOUDINARY_CLOUD_NAME:  ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY:     ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET:  ${{ secrets.CLOUDINARY_API_SECRET }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}

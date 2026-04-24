@@ -210,6 +210,64 @@ def publish_reels_to_instagram(video_url: str, caption: str, ig_user_id: str, ac
     return post_id
 
 
+def schedule_reels_to_instagram(
+    video_url: str,
+    caption: str,
+    ig_user_id: str,
+    access_token: str,
+    scheduled_publish_time: int,
+) -> str:
+    """
+    Instagram Reels を予約投稿し、post_id を返す。
+    published=false + scheduled_publish_time でコンテナを作成し、
+    media_publish で予約を確定させる。時刻になると Instagram が自動公開する。
+    """
+    r1 = requests.post(
+        f"https://graph.facebook.com/v25.0/{ig_user_id}/media",
+        data={
+            "media_type": "REELS",
+            "video_url": video_url,
+            "caption": caption,
+            "share_to_feed": "true",
+            "published": "false",
+            "scheduled_publish_time": str(scheduled_publish_time),
+            "access_token": access_token,
+        },
+        timeout=60,
+    )
+    if not r1.ok:
+        raise RuntimeError(f"Reels予約コンテナ作成失敗 ({r1.status_code}): {r1.text}")
+    container_id = r1.json()["id"]
+    print(f"[PostAgent] Reels予約コンテナ作成: {container_id}")
+
+    # 動画処理完了をポーリング（最大180秒）
+    for i in range(18):
+        time.sleep(10)
+        status_r = requests.get(
+            f"https://graph.facebook.com/v25.0/{container_id}",
+            params={"fields": "status_code", "access_token": access_token},
+            timeout=30,
+        )
+        status_code = status_r.json().get("status_code", "")
+        print(f"[PostAgent] Reels処理状態: {status_code} ({(i+1)*10}秒経過)")
+        if status_code == "FINISHED":
+            break
+        if status_code in ("ERROR", "EXPIRED"):
+            raise RuntimeError(f"Reels処理失敗: {status_code}")
+
+    # media_publish で予約を確定（published=false のため即時公開されず予約となる）
+    r3 = requests.post(
+        f"https://graph.facebook.com/v25.0/{ig_user_id}/media_publish",
+        data={"creation_id": container_id, "access_token": access_token},
+        timeout=30,
+    )
+    if not r3.ok:
+        raise RuntimeError(f"Reels予約確定失敗 ({r3.status_code}): {r3.text}")
+    post_id = r3.json()["id"]
+    print(f"[PostAgent] Reels予約確定: post_id={post_id} scheduled_unix={scheduled_publish_time}")
+    return post_id
+
+
 def get_recent_insights(ig_user_id: str, access_token: str, limit: int = 5) -> list[dict]:
     """直近の投稿インサイトを取得（フォロワーリーチ・インプレッション）"""
     r = requests.get(

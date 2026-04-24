@@ -36,19 +36,12 @@ _FOLLOWUP_PROMPT = """\
 補足コメントの本文のみ出力してください。前置き・説明不要。\
 """
 
-from agents.affiliate_resolver import resolve_by_weekday, resolve_by_theme
-
 THREADS_API = "https://graph.threads.net/v1.0"
 
 
 def build_threads_text(base_text: str, weekday: int, theme: Optional[str] = None) -> str:
-    """
-    本文末尾にアフィリエイトリンクブロックを付与する。
-    theme を指定するとテーマ優先でリンクを選択する。
-    """
-    aff = resolve_by_theme(theme) if theme else resolve_by_weekday(weekday)
-    link_block = f"\n\n{aff['cta']}\n{aff['label']}\n{aff['url']}"
-    return base_text + link_block
+    """本文をそのまま返す。シグネチャは後方互換のため維持。"""
+    return base_text
 
 
 def publish_to_threads(
