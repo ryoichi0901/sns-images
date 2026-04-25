@@ -38,7 +38,7 @@ from agents.post_agent import (
 )
 from agents.short_video_agent import generate_short_video_script, save_script
 from agents.threads_agent import publish_to_threads, post_followup_comment
-from agents.twitter_agent import publish_to_twitter
+# from agents.twitter_agent import publish_to_twitter
 from agents.analytics_agent import log_post, print_summary
 from agents.affiliate_resolver import validate_env as validate_affiliate_env
 
