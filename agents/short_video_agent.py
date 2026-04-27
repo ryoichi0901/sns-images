@@ -11,7 +11,7 @@ from typing import Optional
 
 import anthropic
 
-from agents.content_agent import _load_themes, select_template, _load_research_context
+from agents.content_agent import _load_themes, select_template, _load_research_context, _load_buzz_analysis
 
 LOGS_DIR = Path(__file__).parent.parent / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
@@ -30,6 +30,20 @@ SHORT_VIDEO_SYSTEM_PROMPT = """あなたは金融×AI副業の専門家インフ
 - 「していた→損をした→だから話す」の因果の流れを意識する
 - 「〜なんです」「〜なんですよ」「〜ですよね」等の自然な話し言葉を使う
 - 上から目線・断定的なトーンは避ける
+
+【人間らしさのルール（最重要）】
+以下を意図的に混ぜること:
+- 文の長さを不均一にする（短い1語文 → 長い文 → また短い文）
+- 言い直し・補足を入れる（「というか、」「正確には、」「あ、でも」）
+- 断定を避ける箇所では曖昧にする（「〜な気がして」「〜だったと思う」）
+- 体験の「前」の感情を入れる（「最初は正直めんどくさかった」「半信半疑だった」）
+
+以下は絶対に使わない（AI感が出るNG表現）:
+- 「まず〜次に〜そして〜」の列挙構造
+- 「〜ことが大切です」「〜ことが重要です」
+- 「ぜひ〜してみてください」
+- 「いかがでしたか？」
+- 体言止めの連続（「節税。副業。資産形成。」）
 
 【コンプライアンス（必須遵守・違反厳禁）】
 以下の表現は絶対に使わない:
@@ -106,6 +120,7 @@ def generate_short_video_script(
     group = _get_theme_group(themes, weekday)
     tmpl = select_template(today, template_id)
     research_context = _load_research_context(today)
+    buzz_analysis = _load_buzz_analysis()
 
     character_phrase = group.get("character_phrase", "元銀行員の私が経験から話す")
     cta_text = group.get("cta_text", "続きはプロフィールから")
@@ -139,6 +154,22 @@ def generate_short_video_script(
 {hooks or "  データなし"}
 ▼ トレンドKW: {kw or "データなし"}
 ▼ バズパターン: {comp.get("buzz_patterns", "データなし")}"""
+
+    if buzz_analysis:
+        patterns = buzz_analysis.get("patterns", {})
+        top_hooks = "\n".join(
+            f"  - {h}" for h in patterns.get("top_hooks", [])
+        ) or "  データなし"
+        diff_tips = "\n".join(
+            f"  - {t}" for t in patterns.get("differentiation_tips", [])
+        ) or "  データなし"
+        user_prompt += f"""
+
+【週次バズ分析（フックとシーン構成に反映すること）】
+▼ バズっているフックパターン:
+{top_hooks}
+▼ 差別化ポイント:
+{diff_tips}"""
 
     user_prompt += """
 

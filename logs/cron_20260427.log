@@ -1,0 +1,103 @@
+
+========================================
+  21:00 投稿開始: 2026-04-27 21:00:00
+========================================
+
+  Instagram + Threads + 補足コメント(5分後)
+  開始: 21:00:01
+/Users/watanaberyouichi/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+
+=== 金融×AI副業 SNS自動化エージェントシステム ===
+
+投稿モード: カルーセル7枚
+[ENV] Instagram: 設定済み ✓
+[ENV] Threads: 設定済み ✓
+[ENV] X(Twitter): スキップ（未設定: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET）
+[ENV] アフィリエイト: 0/4件設定済み（未設定: AFFILIATE_LINK_FX, AFFILIATE_LINK_NISA, AFFILIATE_LINK_SIDE_BUSINESS, LINKTREE_URL）
+      → 未設定のリンクは LINKTREE_URL にフォールバックします
+
+実行日: 2026-04-27（月曜日）
+
+[Step 1] カルーセルコンテンツ取得...
+[ContentAgent] リサーチコンテキストなし（スキップ）
+[ContentAgent] テンプレート自動選択: 知ってる人vs知らない人型 (comparison)
+[ContentAgent] トークン: 入力=3443, キャッシュ読込=0
+[ContentAgent] カルーセル生成完了: 銀行員が本当は使っていたNISA活用術：知ってる人vs知らない人の5つの行動差
+[ContentAgent] スライド数: 7
+[ContentAgent] テンプレート: comparison
+  トピック   : 銀行員が本当は使っていたNISA活用術：知ってる人vs知らない人の5つの行動差
+  テンプレート: comparison
+  スライド数 : 7枚
+  Instagram  : 308字
+  Threads    : 329字
+  X          : 126字
+
+[Step 2] カルーセル画像生成（7枚）...
+[ImageAgent] スライド1 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260427_slide1.jpg (64KB)
+[ImageAgent] スライド2 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260427_slide2.jpg (61KB)
+[ImageAgent] スライド3 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260427_slide3.jpg (67KB)
+[ImageAgent] スライド4 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260427_slide4.jpg (83KB)
+[ImageAgent] スライド5 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260427_slide5.jpg (76KB)
+[ImageAgent] スライド6 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260427_slide6.jpg (51KB)
+[ImageAgent] スライド7 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260427_slide7.jpg (65KB)
+
+[Step 3] Cloudinaryにアップロード（7枚）...
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291767/stj4cc2bnew4tjhjmfbf.jpg
+  スライド1: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291767/stj4cc2bnew4tjhjmfbf.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291769/koee1gdgf821sgbttr3y.jpg
+  スライド2: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291769/koee1gdgf821sgbttr3y.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291771/ljolul3psxlh2dugmqeu.jpg
+  スライド3: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291771/ljolul3psxlh2dugmqeu.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291773/lhoay0vyykmalkokzkjl.jpg
+  スライド4: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291773/lhoay0vyykmalkokzkjl.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291775/guytynarr1sqratd1dcz.jpg
+  スライド5: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291775/guytynarr1sqratd1dcz.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291778/hvenmpnxxzqaujtvt1ij.jpg
+  スライド6: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291778/hvenmpnxxzqaujtvt1ij.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291779/nrlofxxrhxifkpwqvivg.jpg
+  スライド7: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777291779/nrlofxxrhxifkpwqvivg.jpg
+
+[Step 4a] Instagramカルーセル投稿（7枚）...
+[Instagram] カルーセル投稿失敗: 400 Client Error: Bad Request for url: https://graph.facebook.com/v25.0/17841433555586625/media
+
+[Step 4b] Threads投稿（テキストのみ）...
+[ThreadsAgent] コンテナ作成: 18097835638892462
+[ThreadsAgent] 投稿完了: 18109839823845930
+[Analytics] ログ記録: 2026-04-27T21:09 | 銀行員が本当は使っていたNISA活用術：知ってる人vs知らない人の5つの行動差 | threads
+[Obsidian] 投稿ログ保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/投稿ログ/2026-04-27.md
+
+[ThreadsAgent] 補足コメント: 5分後に投稿します...
+  あと 300秒...  あと 270秒...  あと 240秒...  あと 210秒...  あと 180秒...  あと 150秒...  あと 120秒...  あと 90秒...  あと 60秒...  あと 30秒...
+[ThreadsAgent] 補足コメント生成中...
+[ThreadsAgent] 補足コメント生成完了: 150字
+  内容: 補足：銀行員時代、顧客の運用成績を見て「この人たちはちゃんと増やしてるな」と感じながらも、自分は「給与だけで十分」と行動...
+[ThreadsAgent] 補足コメントコンテナ: 18097836892892462
+[ThreadsAgent] 補足コメント投稿完了: 17853499419662285
+
+============================================================
+  投稿サマリー（直近7件）
+============================================================
+  2026-04-18T13:48 | 金融業界の常識破壊：20年銀行員が明 | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T13:49 | 元銀行員が明かす、AIツール活用で月 | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T15:23 | 銀行員が暴露するお金の常識9割の嘘と | –Instagram –Threads   –X(Twitter)
+  2026-04-24T16:58 | 銀行員20年が初めて語る、金融機関の | ✓Instagram ✓Threads   –X(Twitter)
+  2026-04-24T21:09 | 銀行員20年だから知る、金融機関が言 | –Instagram ✓Threads   –X(Twitter)
+  2026-04-26T21:09 | 銀行員が語る、給与×投資×副業でFI | –Instagram ✓Threads   –X(Twitter)
+  2026-04-27T21:09 | 銀行員が本当は使っていたNISA活用 | –Instagram ✓Threads   –X(Twitter)
+============================================================
+  累計投稿数: 8
+============================================================
+
+[Obsidian] 週次レポート保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/分析レポート/2026-04-27-weekly.md
+=== 完了 ===
+
+  完了: 21:15:06 (exit: 0)
+========================================

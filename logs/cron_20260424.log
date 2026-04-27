@@ -1,0 +1,165 @@
+
+========================================
+  自動投稿開始: 2026-04-24 16:46:18
+========================================
+**✅ 投稿完了！** 全工程が正常に終了しました。
+
+---
+
+## 📊 本日の投稿サマリー（2026-04-24・金曜日）
+
+### 投稿内容
+| 項目 | 内容 |
+|---|---|
+| **テーマ** | 金曜：銀行員の裏話（banking_secrets） |
+| **テンプレート** | `banker_secret`（元バンカー暴露型） |
+| **トピック** | 銀行員20年が初めて語る、金融機関の裏側と知らないと損するお金の真実5つ |
+| **フォーマット** | カルーセル **7枚** |
+
+### 実行フロー結果
+| ステップ | 内容 | 状態 |
+|---|---|---|
+| Step 1 | コンテンツ生成（AI） | ✅ 完了 |
+| Step 2 | 画像生成 × 7枚 | ✅ 完了（36〜70KB） |
+| Step 3 | Cloudinaryアップロード × 7枚 | ✅ 完了 |
+| Step 4a | **Instagram**カルーセル投稿 | ✅ 完了（ID: `18116613382670664`） |
+| Step 4b | **Threads**投稿 | ✅ 完了（ID: `18063815948690175`） |
+| Step 5 | アナリティクスログ・Obsidian保存 | ✅ 完了 |
+
+### ログ保存先
+- 📓 `logs/post_log.jsonl`
+- 📋 Obsidian: `SNS運用/投稿ログ/2026-04-24.md`
+- 📈 Obsidian: `SNS運用/分析レポート/2026-04-24-weekly.md`
+
+---
+
+### ⚠️ 次回のために確認推奨
+**アフィリエイトリンクが未設定**のため、現在はフォールバック（`https://lit.link/`）を使用しています。  
+`~/Documents/Obsidian Vault/.env` に以下を設定するとCV率が上がります：
+```
+AFFILIATE_LINK_NISA=（NISA・証券口座開設リンク）
+LINKTREE_URL=（あなたのLinktreeURL）
+```
+
+金曜テーマは `banking_secrets` → `AFFILIATE_LINK_NISA` が最適な導線です。
+
+  完了: 2026-04-24 16:59:01 (exit: 0)
+========================================
+
+========================================
+  21:00 フル投稿開始: 2026-04-24 21:00:01
+========================================
+
+  [Phase 1] Instagram + Threads + 補足コメント(5分後)
+  開始: 21:00:01
+/Users/watanaberyouichi/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+
+=== 金融×AI副業 SNS自動化エージェントシステム ===
+
+投稿モード: カルーセル7枚
+[ENV] Instagram: 設定済み ✓
+[ENV] Threads: 設定済み ✓
+[ENV] X(Twitter): スキップ（未設定: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET）
+[ENV] アフィリエイト: 0/4件設定済み（未設定: AFFILIATE_LINK_FX, AFFILIATE_LINK_NISA, AFFILIATE_LINK_SIDE_BUSINESS, LINKTREE_URL）
+      → 未設定のリンクは LINKTREE_URL にフォールバックします
+
+実行日: 2026-04-24（金曜日）
+
+[Step 1] カルーセルコンテンツ取得...
+[ContentAgent] リサーチコンテキストなし（スキップ）
+[ContentAgent] テンプレート自動選択: 元バンカー暴露型 (banker_secret)
+[ContentAgent] トークン: 入力=3415, キャッシュ読込=0
+[ContentAgent] カルーセル生成完了: 銀行員20年だから知る、金融機関が言えなかったお金の真実5つ
+[ContentAgent] スライド数: 7
+[ContentAgent] テンプレート: banker_secret
+  トピック   : 銀行員20年だから知る、金融機関が言えなかったお金の真実5つ
+  テンプレート: banker_secret
+  スライド数 : 7枚
+  Instagram  : 368字
+  Threads    : 400字
+  X          : 89字
+
+[Step 2] カルーセル画像生成（7枚）...
+[ImageAgent] スライド1 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260424_slide1.jpg (74KB)
+[ImageAgent] スライド2 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260424_slide2.jpg (49KB)
+[ImageAgent] スライド3 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260424_slide3.jpg (22KB)
+[ImageAgent] スライド4 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260424_slide4.jpg (103KB)
+[ImageAgent] スライド5 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260424_slide5.jpg (44KB)
+[ImageAgent] スライド6 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260424_slide6.jpg (82KB)
+[ImageAgent] スライド7 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260424_slide7.jpg (44KB)
+
+[Step 3] Cloudinaryにアップロード（7枚）...
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032576/bmjtzehvdasyqon4am4d.jpg
+  スライド1: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032576/bmjtzehvdasyqon4am4d.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032578/aa8n8kwk33gm0yjssjbg.jpg
+  スライド2: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032578/aa8n8kwk33gm0yjssjbg.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032580/xhnuwlizxyj6i8yqbmen.jpg
+  スライド3: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032580/xhnuwlizxyj6i8yqbmen.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032582/ebbw3omyklyuxgcbfi7c.jpg
+  スライド4: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032582/ebbw3omyklyuxgcbfi7c.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032583/naqozyg0giyx3umb4zpc.jpg
+  スライド5: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032583/naqozyg0giyx3umb4zpc.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032585/lyjum4xnobsg5xsvquo8.jpg
+  スライド6: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032585/lyjum4xnobsg5xsvquo8.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032587/zvo503oprhtaponpsutc.jpg
+  スライド7: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777032587/zvo503oprhtaponpsutc.jpg
+
+[Step 4a] Instagramカルーセル投稿（7枚）...
+[Instagram] カルーセル投稿失敗: 400 Client Error: Bad Request for url: https://graph.facebook.com/v25.0/17841433555586625/media
+
+[Step 4b] Threads投稿（テキストのみ）...
+[ThreadsAgent] コンテナ作成: 18096990556892462
+[ThreadsAgent] 投稿完了: 17856521877638642
+[Analytics] ログ記録: 2026-04-24T21:09 | 銀行員20年だから知る、金融機関が言えなかったお金の真実5つ | threads
+[Obsidian] 投稿ログ保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/投稿ログ/2026-04-24.md
+
+[ThreadsAgent] 補足コメント: 5分後に投稿します...
+  あと 300秒...  あと 270秒...  あと 240秒...  あと 210秒...  あと 180秒...  あと 150秒...  あと 120秒...  あと 90秒...  あと 60秒...  あと 30秒...
+[ThreadsAgent] 補足コメント生成中...
+[ThreadsAgent] 補足コメント生成完了: 150字
+  内容: 補足：同じ予算で顧客に「投信A」と「投信B」を提案する際、手数料が0.5%高いAを優先するよう指導されていました。年間3...
+[ThreadsAgent] 補足コメントコンテナ: 18096991735892462
+[ThreadsAgent] 補足コメント投稿完了: 17983686504002527
+
+============================================================
+  投稿サマリー（直近7件）
+============================================================
+  2026-04-17T21:12 | 資産形成の知識格差：複利とNISAの | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T13:48 | 金融業界の常識破壊：20年銀行員が明 | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T13:49 | 元銀行員が明かす、AIツール活用で月 | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T15:23 | 銀行員が暴露するお金の常識9割の嘘と | –Instagram –Threads   –X(Twitter)
+  2026-04-24T16:58 | 銀行員20年が初めて語る、金融機関の | ✓Instagram ✓Threads   –X(Twitter)
+  2026-04-24T21:09 | 銀行員20年だから知る、金融機関が言 | –Instagram ✓Threads   –X(Twitter)
+============================================================
+  累計投稿数: 6
+============================================================
+
+[Obsidian] 週次レポート保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/分析レポート/2026-04-24-weekly.md
+=== 完了 ===
+
+  [Phase 1] 完了: 21:15:15 (exit: 0)
+
+  [Phase 2] sns-orchestrator → Reels生成・投稿
+  開始: 21:15:15
+
+error: An unknown error occurred, possibly due to low max file descriptors (Unexpected)
+
+Current limit: 256
+
+To fix this, try running:
+
+  ulimit -n 2147483646
+
+If that still doesn't work, you may need to run:
+
+  sudo launchctl limit maxfiles 2147483646
+  [Phase 2] 完了: 21:15:21 (exit: 1)
+========================================

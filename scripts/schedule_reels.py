@@ -30,6 +30,7 @@ from agents.short_video_agent import generate_short_video_script, save_script
 from agents.video_agent import render_reel_local
 from agents.post_agent import upload_video_to_cloudinary, schedule_reels_to_instagram
 from agents.reels_agent import build_caption
+from agents.buzz_analyzer import run_weekly_analysis, is_analysis_fresh
 
 ENV_PATH = os.path.expanduser("~/Documents/Obsidian Vault/.env")
 JST = datetime.timezone(datetime.timedelta(hours=9))
@@ -77,7 +78,19 @@ def main() -> None:
     print(f"実行日時: {now_jst.strftime('%Y-%m-%d %H:%M JST')}（{day_names[wd]}曜日）")
     print(f"公開予定: {scheduled_jst.strftime('%Y-%m-%d %H:%M JST')} (Unix: {scheduled_unix})\n")
 
-    # Step 1: 台本生成（research_context_YYYYMMDD.json を自動読込）
+    # Step 0: バズ投稿分析（週1回・古い場合のみ実行）
+    if not is_analysis_fresh():
+        print("[Step 0] バズ投稿週次分析実行中...")
+        threads_token = os.getenv("THREADS_ACCESS_TOKEN", "")
+        threads_uid = os.getenv("THREADS_USER_ID", "")
+        try:
+            run_weekly_analysis(client, access_token=threads_token, user_id=threads_uid)
+        except Exception as e:
+            print(f"[Step 0] バズ分析失敗（続行）: {e}")
+    else:
+        print("[Step 0] バズ分析は最新（スキップ）")
+
+    # Step 1: 台本生成（research_context_YYYYMMDD.json / buzz_analysis.json を自動読込）
     print("[Step 1] ショート動画台本生成...")
     script = generate_short_video_script(wd, client)
     script_path = save_script(script, date=today_jst)

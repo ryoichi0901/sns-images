@@ -1,0 +1,11 @@
+{
+  "accounts": [
+    "money_education_jp",
+    "nisa_begin",
+    "sidejob_finance",
+    "bank_secret_jp"
+  ],
+  "genres": ["副業", "AI", "NISA", "投資", "節税", "資産形成"],
+  "buzz_threshold": 100,
+  "analysis_frequency_days": 7
+}

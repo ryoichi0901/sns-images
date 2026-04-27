@@ -1,0 +1,103 @@
+
+========================================
+  21:00 投稿開始: 2026-04-26 21:00:01
+========================================
+
+  Instagram + Threads + 補足コメント(5分後)
+  開始: 21:00:02
+/Users/watanaberyouichi/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+
+=== 金融×AI副業 SNS自動化エージェントシステム ===
+
+投稿モード: カルーセル7枚
+[ENV] Instagram: 設定済み ✓
+[ENV] Threads: 設定済み ✓
+[ENV] X(Twitter): スキップ（未設定: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET）
+[ENV] アフィリエイト: 0/4件設定済み（未設定: AFFILIATE_LINK_FX, AFFILIATE_LINK_NISA, AFFILIATE_LINK_SIDE_BUSINESS, LINKTREE_URL）
+      → 未設定のリンクは LINKTREE_URL にフォールバックします
+
+実行日: 2026-04-26（日曜日）
+
+[Step 1] カルーセルコンテンツ取得...
+[ContentAgent] リサーチコンテキストなし（スキップ）
+[ContentAgent] テンプレート自動選択: 完全ステップガイド型 (step_guide)
+[ContentAgent] トークン: 入力=3413, キャッシュ読込=0
+[ContentAgent] カルーセル生成完了: 銀行員が語る、給与×投資×副業でFIREと老後資金を現実化するロードマップ
+[ContentAgent] スライド数: 7
+[ContentAgent] テンプレート: step_guide
+  トピック   : 銀行員が語る、給与×投資×副業でFIREと老後資金を現実化するロードマップ
+  テンプレート: step_guide
+  スライド数 : 7枚
+  Instagram  : 304字
+  Threads    : 331字
+  X          : 80字
+
+[Step 2] カルーセル画像生成（7枚）...
+[ImageAgent] スライド1 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260426_slide1.jpg (63KB)
+[ImageAgent] スライド2 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260426_slide2.jpg (50KB)
+[ImageAgent] スライド3 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260426_slide3.jpg (58KB)
+[ImageAgent] スライド4 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260426_slide4.jpg (54KB)
+[ImageAgent] スライド5 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260426_slide5.jpg (38KB)
+[ImageAgent] スライド6 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260426_slide6.jpg (64KB)
+[ImageAgent] スライド7 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260426_slide7.jpg (47KB)
+
+[Step 3] Cloudinaryにアップロード（7枚）...
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205377/l80iac9zroqhqflotza8.jpg
+  スライド1: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205377/l80iac9zroqhqflotza8.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205379/v4dxkdybo3dpk6jig8hi.jpg
+  スライド2: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205379/v4dxkdybo3dpk6jig8hi.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205381/kaxlxxctx90nfrj4huuh.jpg
+  スライド3: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205381/kaxlxxctx90nfrj4huuh.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205383/v0sm8qmndnsl3wlowbva.jpg
+  スライド4: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205383/v0sm8qmndnsl3wlowbva.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205385/pb0entm9semrls7cfzon.jpg
+  スライド5: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205385/pb0entm9semrls7cfzon.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205386/wvpvuzcbes8eqwnyhb0u.jpg
+  スライド6: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205386/wvpvuzcbes8eqwnyhb0u.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205388/muf2insvtann4nnlz3lj.jpg
+  スライド7: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777205388/muf2insvtann4nnlz3lj.jpg
+
+[Step 4a] Instagramカルーセル投稿（7枚）...
+[Instagram] カルーセル投稿失敗: 400 Client Error: Bad Request for url: https://graph.facebook.com/v25.0/17841433555586625/media
+
+[Step 4b] Threads投稿（テキストのみ）...
+[ThreadsAgent] コンテナ作成: 18097537681892462
+[ThreadsAgent] 投稿完了: 18116984581664427
+[Analytics] ログ記録: 2026-04-26T21:09 | 銀行員が語る、給与×投資×副業でFIREと老後資金を現実化するロードマップ | threads
+[Obsidian] 投稿ログ保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/投稿ログ/2026-04-26.md
+
+[ThreadsAgent] 補足コメント: 5分後に投稿します...
+  あと 300秒...  あと 270秒...  あと 240秒...  あと 210秒...  あと 180秒...  あと 150秒...  あと 120秒...  あと 90秒...  あと 60秒...  あと 30秒...
+[ThreadsAgent] 補足コメント生成中...
+[ThreadsAgent] 補足コメント生成完了: 150字
+  内容: 補足：顧客面談で「月5万の積立投資を20年続けたら1500万貯まります」と説明していたのに、実際は手取りが増えず途中で止...
+[ThreadsAgent] 補足コメントコンテナ: 18097539268892462
+[ThreadsAgent] 補足コメント投稿完了: 18092341945924908
+
+============================================================
+  投稿サマリー（直近7件）
+============================================================
+  2026-04-17T21:12 | 資産形成の知識格差：複利とNISAの | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T13:48 | 金融業界の常識破壊：20年銀行員が明 | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T13:49 | 元銀行員が明かす、AIツール活用で月 | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T15:23 | 銀行員が暴露するお金の常識9割の嘘と | –Instagram –Threads   –X(Twitter)
+  2026-04-24T16:58 | 銀行員20年が初めて語る、金融機関の | ✓Instagram ✓Threads   –X(Twitter)
+  2026-04-24T21:09 | 銀行員20年だから知る、金融機関が言 | –Instagram ✓Threads   –X(Twitter)
+  2026-04-26T21:09 | 銀行員が語る、給与×投資×副業でFI | –Instagram ✓Threads   –X(Twitter)
+============================================================
+  累計投稿数: 7
+============================================================
+
+[Obsidian] 週次レポート保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/分析レポート/2026-04-26-weekly.md
+=== 完了 ===
+
+  完了: 21:15:16 (exit: 0)
+========================================
