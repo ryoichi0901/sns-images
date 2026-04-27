@@ -66,18 +66,21 @@ def _gradient_bg(draw: ImageDraw.ImageDraw) -> None:
 
 
 def _wrap(draw: ImageDraw.ImageDraw, text: str, font, max_w: int) -> list[str]:
-    """文字単位で折り返す（日本語対応）"""
-    lines, cur = [], ""
-    for ch in text:
-        test = cur + ch
-        if draw.textlength(test, font=font) > max_w and cur:
+    """文字単位で折り返す（日本語対応・改行文字対応）"""
+    all_lines = []
+    for paragraph in text.split('\n'):
+        lines, cur = [], ""
+        for ch in paragraph:
+            test = cur + ch
+            if draw.textlength(test, font=font) > max_w and cur:
+                lines.append(cur)
+                cur = ch
+            else:
+                cur = test
+        if cur:
             lines.append(cur)
-            cur = ch
-        else:
-            cur = test
-    if cur:
-        lines.append(cur)
-    return lines
+        all_lines.extend(lines)
+    return all_lines
 
 
 def _draw_centered(
