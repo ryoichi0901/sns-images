@@ -1,0 +1,105 @@
+
+========================================
+  21:00 投稿開始: 2026-04-28 21:00:00
+========================================
+
+  Instagram + Threads + 補足コメント(5分後)
+  開始: 21:00:00
+/Users/watanaberyouichi/Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+
+=== 金融×AI副業 SNS自動化エージェントシステム ===
+
+投稿モード: カルーセル7枚
+[ENV] Instagram: 設定済み ✓
+[ENV] Threads: 設定済み ✓
+[ENV] X(Twitter): スキップ（未設定: TWITTER_API_KEY, TWITTER_API_SECRET, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET）
+[ENV] アフィリエイト: 0/4件設定済み（未設定: AFFILIATE_LINK_FX, AFFILIATE_LINK_NISA, AFFILIATE_LINK_SIDE_BUSINESS, LINKTREE_URL）
+      → 未設定のリンクは LINKTREE_URL にフォールバックします
+
+実行日: 2026-04-28（火曜日）
+
+[Step 1] カルーセルコンテンツ取得...
+[ContentAgent] リサーチコンテキストなし（スキップ）
+[ContentAgent] バズ分析読込: フックパターン3件
+[ContentAgent] 文体プロファイル読込完了
+[ContentAgent] テンプレート自動選択: 常識破壊型 (myth_busting)
+[ContentAgent] トークン: 入力=5134, キャッシュ読込=0
+[ContentAgent] カルーセル生成完了: AI副業の常識破壊：銀行員が暴露する5つの誤解と真実
+[ContentAgent] スライド数: 7
+[ContentAgent] テンプレート: myth_busting
+  トピック   : AI副業の常識破壊：銀行員が暴露する5つの誤解と真実
+  テンプレート: myth_busting
+  スライド数 : 7枚
+  Instagram  : 262字
+  Threads    : 131字
+  X          : 88字
+
+[Step 2] カルーセル画像生成（7枚）...
+[ImageAgent] スライド1 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260428_slide1.jpg (70KB)
+[ImageAgent] スライド2 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260428_slide2.jpg (45KB)
+[ImageAgent] スライド3 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260428_slide3.jpg (52KB)
+[ImageAgent] スライド4 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260428_slide4.jpg (87KB)
+[ImageAgent] スライド5 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260428_slide5.jpg (28KB)
+[ImageAgent] スライド6 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260428_slide6.jpg (50KB)
+[ImageAgent] スライド7 生成中... (試行1/3)
+[ImageAgent] 保存完了: post_20260428_slide7.jpg (73KB)
+
+[Step 3] Cloudinaryにアップロード（7枚）...
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378172/filjjkdnmkcqpbysf199.jpg
+  スライド1: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378172/filjjkdnmkcqpbysf199.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378173/rcoiav1p2asbexfpz4fn.jpg
+  スライド2: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378173/rcoiav1p2asbexfpz4fn.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378175/pacazz1ysduffj8mwdg2.jpg
+  スライド3: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378175/pacazz1ysduffj8mwdg2.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378177/rxzyjlscyiyo5ctle493.jpg
+  スライド4: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378177/rxzyjlscyiyo5ctle493.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378178/voyh3buquk9r5mzrhsmy.jpg
+  スライド5: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378178/voyh3buquk9r5mzrhsmy.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378180/vmgjb2k0upvwmgojuqgy.jpg
+  スライド6: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378180/vmgjb2k0upvwmgojuqgy.jpg
+[PostAgent] Cloudinaryアップロード完了: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378182/hbphmllewxkhzwz5vvdi.jpg
+  スライド7: https://res.cloudinary.com/dw6iu8dn9/image/upload/v1777378182/hbphmllewxkhzwz5vvdi.jpg
+
+[Step 4a] Instagramカルーセル投稿（7枚）...
+[Instagram] カルーセル投稿失敗: 400 Client Error: Bad Request for url: https://graph.facebook.com/v25.0/17841433555586625/media
+
+[Step 4b] Threads投稿（テキストのみ）...
+[ThreadsAgent] コンテナ作成: 18098144962892462
+[ThreadsAgent] 投稿完了: 17997467576762752
+[Analytics] ログ記録: 2026-04-28T21:09 | AI副業の常識破壊：銀行員が暴露する5つの誤解と真実 | threads
+[Obsidian] 投稿ログ保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/投稿ログ/2026-04-28.md
+
+[ThreadsAgent] 補足コメント: 5分後に投稿します...
+  あと 300秒...  あと 270秒...  あと 240秒...  あと 210秒...  あと 180秒...  あと 150秒...  あと 120秒...  あと 90秒...  あと 60秒...  あと 30秒...
+[ThreadsAgent] 補足コメント生成中...
+[ThreadsAgent] 補足コメント生成完了: 125字
+  内容: 補足：銀行員時代、融資審査で月5万以上の副業収入を持つ顧客を見てきたんですが、成功してる人ほど「地味」でした。SNS映え...
+[ThreadsAgent] 補足コメントコンテナ: 18098146483892462
+[ThreadsAgent] 補足コメント投稿完了: 17848302807696365
+
+============================================================
+  投稿サマリー（直近7件）
+============================================================
+  2026-04-18T13:49 | 元銀行員が明かす、AIツール活用で月 | ✓Instagram –Threads   –X(Twitter)
+  2026-04-18T15:23 | 銀行員が暴露するお金の常識9割の嘘と | –Instagram –Threads   –X(Twitter)
+  2026-04-24T16:58 | 銀行員20年が初めて語る、金融機関の | ✓Instagram ✓Threads   –X(Twitter)
+  2026-04-24T21:09 | 銀行員20年だから知る、金融機関が言 | –Instagram ✓Threads   –X(Twitter)
+  2026-04-26T21:09 | 銀行員が語る、給与×投資×副業でFI | –Instagram ✓Threads   –X(Twitter)
+  2026-04-27T21:09 | 銀行員が本当は使っていたNISA活用 | –Instagram ✓Threads   –X(Twitter)
+  2026-04-28T21:09 | AI副業の常識破壊：銀行員が暴露する | –Instagram ✓Threads   –X(Twitter)
+============================================================
+  累計投稿数: 9
+============================================================
+
+[Obsidian] 週次レポート保存: /Users/watanaberyouichi/Documents/Obsidian Vault/SNS運用/分析レポート/2026-04-28-weekly.md
+=== 完了 ===
+
+  完了: 21:15:07 (exit: 0)
+========================================
