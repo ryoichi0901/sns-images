@@ -1,0 +1,14 @@
+{
+  "_comment": "carousel_redesign_v4.html のDOM構造に合わせてセレクタを調整してください",
+  "html_file": "templates/carousel_redesign_v4.html",
+  "viewport": { "width": 1080, "height": 1350 },
+  "device_scale_factor": 2,
+  "slide_selector": ".slide",
+  "content_selectors": {
+    "headline": ".headline, .slide-headline, h1, h2",
+    "subtext":  ".subtext, .subtitle, .slide-subtext",
+    "body":     ".body-text, .body, .slide-body, p"
+  },
+  "wait_ms": 300,
+  "output_format": "png"
+}

@@ -29,6 +29,7 @@ from dotenv import load_dotenv
 
 from agents.content_agent import generate_content, generate_carousel_content, list_templates
 from agents.image_agent import generate_image, generate_carousel_images
+from agents.carousel_agent import capture_slides, capture_slides_dry_run
 from agents.post_agent import (
     upload_to_cloudinary,
     upload_video_to_cloudinary,
@@ -200,8 +201,8 @@ def run(
 
         # Step 2 & 3: 画像が必要なプラットフォームがある場合のみ生成・アップロード
         if "ig" in active:
-            print(f"\n[Step 2] カルーセル画像生成（{len(slides)}枚）...")
-            image_paths = generate_carousel_images(slides, date_str)
+            print(f"\n[Step 2] カルーセル画像生成（{len(slides)}枚）— HTML→PNG変換...")
+            image_paths = capture_slides(content, date_str)
 
             print(f"\n[Step 3] Cloudinaryにアップロード（{len(image_paths)}枚）...")
             for i, img_path in enumerate(image_paths, 1):
@@ -467,12 +468,12 @@ def _print_dry_run_carousel(content: dict, weekday: int) -> None:
     print("\n【Instagram キャプション（全体）】")
     print(content["caption"])
 
-    print(f"\n【カルーセルスライド構成（{len(slides)}枚）】")
+    print(f"\n【カルーセルスライド構成（{len(slides)}枚）— HTML→PNG変換予定】")
+    capture_slides_dry_run(content)
     for slide in slides:
         print(f"\n  ── スライド{slide['slide_num']} ──")
         print(f"  見出し : {slide['headline']}")
         print(f"  本文   : {slide['body']}")
-        print(f"  画像PRM: {slide['image_prompt']}")
 
     print("\n【Threads テキスト（アフィリエイトリンク付き）】")
     print(build_threads_text(content["threads_text"], weekday))
