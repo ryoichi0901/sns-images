@@ -197,7 +197,7 @@ JSON形式のみ出力（コードブロックなし）:"""
     try:
         response = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=800,
+            max_tokens=1200,
             messages=[{"role": "user", "content": prompt}],
         )
         text = response.content[0].text.strip().replace("```json", "").replace("```", "").strip()
@@ -224,20 +224,16 @@ def analyze_buzz_patterns(posts: list[dict], client: anthropic.Anthropic) -> dic
 
 {sample_text}
 
-以下の観点で分析してJSON形式で出力してください:
-1. top_hooks: 効果的なフックのパターン5個（フレーズ例付き）
-2. content_structures: よく使われる構成パターン3個
-3. cta_patterns: 効果的なCTAのパターン3個
-4. writing_style: 文体の特徴（箇条書き3点）
-5. avg_post_length: 効果的な投稿の平均文字数の概算
-6. differentiation_tips: ryo_finance_aiが差別化できる独自性ポイント3個
+以下の6項目をJSON形式で出力してください。各リストは3個以内に絞ること。
 
-JSON形式のみ出力（コードブロックなし）:"""
+{{"top_hooks":["フック例1","フック例2","フック例3"],"content_structures":["構成1","構成2","構成3"],"cta_patterns":["CTA1","CTA2","CTA3"],"writing_style":["文体特徴1","文体特徴2","文体特徴3"],"avg_post_length":"100〜150字","differentiation_tips":["差別化1","差別化2","差別化3"]}}
+
+上記のJSON形式のみ出力（説明・コードブロック不要）:"""
 
     try:
         response = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=1000,
+            max_tokens=1500,
             messages=[{"role": "user", "content": prompt}],
         )
         text = response.content[0].text.strip().replace("```json", "").replace("```", "").strip()
