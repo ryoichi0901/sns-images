@@ -4,18 +4,20 @@ on:
   schedule:
     - cron: '0 22 * * *'   # 07:00 JST  Threads テキストのみ
     - cron: '0 3 * * *'    # 12:00 JST  Threads テキストのみ
+    - cron: '0 11 * * *'   # 20:00 JST  いいね対象リスト生成
     # 21:00 JST は Mac cron (cron_21.sh) が担当（sns-orchestrator / Claude CLI が必要なため）
     # - cron: '0 12 * * *'
   workflow_dispatch:
     inputs:
       mode:
-        description: 'threads-only または full（Instagram + Threads + Reels）'
+        description: 'threads-only / full（Instagram + Threads + Reels）/ like-targets'
         required: false
         default: 'threads-only'
 
 jobs:
   post:
     runs-on: ubuntu-latest
+    if: github.event.schedule != '0 11 * * *' && github.event.inputs.mode != 'like-targets'
 
     steps:
       - uses: actions/checkout@v4
@@ -108,5 +110,43 @@ jobs:
             echo "変更なし: コミットをスキップします"
           else
             git commit -m "chore: daily comment research $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+  # 20:00 JST: Instagram/Threads のハッシュタグ検索でいいね対象リストを生成する。
+  # logs/like_targets_YYYYMMDD.md に出力し git push で保存。実際のいいねは手動。
+  like-targets:
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 11 * * *' || github.event.inputs.mode == 'like-targets'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate like targets
+        run: python3 scripts/generate_like_targets.py
+        env:
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
+          THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}
+
+      - name: Commit like targets
+        continue-on-error: true
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add logs/like_targets_*.md logs/ig_hashtag_ids.json
+          if git diff --cached --quiet; then
+            echo "変更なし: コミットをスキップします"
+          else
+            git commit -m "chore: daily like targets $(date -u +%Y-%m-%d)"
             git push
           fi
