@@ -83,7 +83,7 @@ def main() -> None:
         print("[Step 0] バズ投稿週次分析実行中...")
         threads_token = os.getenv("THREADS_ACCESS_TOKEN", "")
         threads_uid = os.getenv("THREADS_USER_ID", "")
-    try:
+        try:
             run_weekly_analysis(client, access_token=threads_token, user_id=threads_uid)
         except Exception as e:
             print(f"[Step 0] バズ分析失敗（続行）: {e}")
@@ -130,18 +130,19 @@ def main() -> None:
     caption = build_caption(script)
     try:
         post_id = schedule_reels_to_instagram(
-            video_url=video_url,
-            caption=caption,
-            ig_user_id=ig_id,
-            access_token=ig_token,
-            scheduled_publish_time=scheduled_unix,
+        video_url=video_url,
+        caption=caption,
+        ig_user_id=ig_id,
+        access_token=ig_token,
+        scheduled_publish_time=scheduled_unix,
         )
         print(f"  予約ID  : {post_id}")
         print(f"  公開予定: {scheduled_jst.strftime('%Y-%m-%d %H:%M JST')}")
-        print(f"\n=== Reels予約完了 ===\n")
+        print("\n=== Reels予約完了 ===\n")
     except Exception as e:
         import sys
-        print(f"[警告] Reels投稿スキップ（App Review未承認）: {e}", file=sys.stderr)
+        print(f"[警告] Reels投稿スキップ: {e}", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
