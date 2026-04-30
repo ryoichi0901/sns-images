@@ -40,6 +40,9 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Install Node dependencies
+        run: npm ci
+
       - name: Install Chromium for Puppeteer
         run: npx puppeteer browsers install chrome
 
