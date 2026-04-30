@@ -128,6 +128,10 @@ def main() -> None:
 
     print(f"\n[Step 4] Reels予約投稿（公開予定: {scheduled_jst.strftime('%Y-%m-%d %H:%M JST')}）...")
     caption = build_caption(script)
+    try:
+    except Exception as e:
+        import sys
+        print(f"[警告] Reels投稿スキップ: {e}", file=sys.stderr)
     post_id = schedule_reels_to_instagram(
         video_url=video_url,
         caption=caption,
