@@ -128,21 +128,20 @@ def main() -> None:
 
     print(f"\n[Step 4] Reels予約投稿（公開予定: {scheduled_jst.strftime('%Y-%m-%d %H:%M JST')}）...")
     caption = build_caption(script)
-    try:
-    except Exception as e:
-        import sys
-        print(f"[警告] Reels投稿スキップ: {e}", file=sys.stderr)
-    post_id = schedule_reels_to_instagram(
-        video_url=video_url,
-        caption=caption,
-        ig_user_id=ig_id,
-        access_token=ig_token,
-        scheduled_publish_time=scheduled_unix,
-    )
-    print(f"  予約ID  : {post_id}")
-    print(f"  公開予定: {scheduled_jst.strftime('%Y-%m-%d %H:%M JST')}")
-    print("\n=== Reels予約完了 ===\n")
-
+        try:
+            post_id = schedule_reels_to_instagram(
+                video_url=video_url,
+                caption=caption,
+                ig_user_id=ig_id,
+                access_token=ig_token,
+                scheduled_publish_time=scheduled_unix,
+            )
+            print(f"  予約ID  : {post_id}")
+            print(f"  公開予定: {scheduled_jst.strftime('%Y-%m-%d %H:%M JST')}")
+            print(f"\n=== Reels予約完了 ===\n")
+        except Exception as e:
+            import sys
+            print(f"[警告] Reels投稿スキップ（App Review未承認）: {e}", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
