@@ -588,28 +588,33 @@ CTA指示: {tmpl['cta_instruction']}
     # 文体プロファイルを注入
     if style_profile:
         endings = "・".join(style_profile.get("ending_patterns", [])[:6])
+        length_tendency = style_profile.get("sentence_length_tendency", "")
+        length_note = style_profile.get("sentence_length_note", "")
         phrases = "・".join(style_profile.get("characteristic_phrases", [])[:6])
+        emotion_style = style_profile.get("emotion_expression_style", "")
         hooks = "\n".join(
             f"  - {h}" for h in style_profile.get("hook_patterns", [])
         ) or "  データなし"
-        avoid = "・".join(style_profile.get("avoid_patterns", [])[:5])
-        emotion_style = style_profile.get("emotion_expression_style", "")
-        length_tendency = style_profile.get("sentence_length_tendency", "")
         rhythm = style_profile.get("rhythm_notes", "")
+        avoid_lines = "\n".join(
+            f"  - {p}" for p in style_profile.get("avoid_patterns", [])
+        ) or "  データなし"
 
         prompt += f"""
 
-【参考文体プロファイル（この文体に近づけること）】
-▼ よく使う語尾: {endings or "データなし"}
-▼ 文長の傾向: {length_tendency or "データなし"}
-▼ 口癖・フレーズ: {phrases or "データなし"}
-▼ 感情表現の特徴: {emotion_style or "データなし"}
-▼ フックパターン:
+【文体プロファイル（必須適用）】
+▼ threads_text の冒頭フック — 以下のいずれかを必ず使うこと:
 {hooks}
-▼ リズム: {rhythm or "データなし"}
-▼ この文体では使わない表現: {avoid or "データなし"}
 
-上記プロファイルを参考にしながら、自然な語り口で生成してください。"""
+▼ threads_text で絶対に使わない表現:
+{avoid_lines}
+
+▼ 全プラットフォーム共通スタイル:
+- 語尾: {endings or "データなし"}
+- 文長: {length_tendency or "データなし"}（{length_note or "データなし"}）
+- 口癖・フレーズ: {phrases or "データなし"}
+- 感情表現: {emotion_style or "データなし"}
+- リズム: {rhythm or "データなし"}"""
 
     prompt += f"""
 

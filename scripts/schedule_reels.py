@@ -1,13 +1,14 @@
 """
 Instagram Reels 生成・予約投稿スクリプト
-07:00 JST の GitHub Actions ワークフローから呼ばれる。
-当日 21:00 JST（12:00 UTC）に Instagram が自動公開する予約投稿を作成する。
+22:00 JST の GitHub Actions ワークフローから呼ばれる。
+翌朝 07:00 JST に Instagram が自動公開する予約投稿を作成する。
+フィード・カルーセル（21:00 JST）との同時投稿を避けるため時間をズラす。
 
 フロー:
   1. Claude Haiku で台本生成（research_context_YYYYMMDD.json を自動読込）
   2. Pillow + FFmpeg で動画生成（1080x1920 / 30fps）
   3. Cloudinary に動画アップロード
-  4. Instagram Graph API で scheduled_publish_time=21:00 JST の予約投稿
+  4. Instagram Graph API で scheduled_publish_time=翌朝07:00 JST の予約投稿
      → published=false のため media_publish 後も即時公開されない
 
 Usage:
@@ -34,11 +35,11 @@ from agents.buzz_analyzer import run_weekly_analysis, is_analysis_fresh
 
 ENV_PATH = os.path.expanduser("~/Documents/Obsidian Vault/.env")
 JST = datetime.timezone(datetime.timedelta(hours=9))
-SCHEDULE_HOUR_JST = 21
+SCHEDULE_HOUR_JST = 7
 
 
 def _scheduled_unix(today_jst: datetime.date) -> int:
-    """当日 21:00 JST の Unix タイムスタンプを返す"""
+    """翌朝 07:00 JST の Unix タイムスタンプを返す（22:00 JST 実行時は必ず翌日になる）"""
     target = datetime.datetime(
         today_jst.year, today_jst.month, today_jst.day,
         SCHEDULE_HOUR_JST, 0, 0,

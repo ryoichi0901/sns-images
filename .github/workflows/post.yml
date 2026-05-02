@@ -5,6 +5,7 @@ on:
     - cron: '0 22 * * *'   # 07:00 JST  Threads テキストのみ
     - cron: '0 3 * * *'    # 12:00 JST  Threads テキストのみ
     - cron: '0 11 * * *'   # 20:00 JST  いいね対象リスト生成
+    - cron: '0 13 * * *'   # 22:00 JST  Reels 翌朝07:00 JST 予約投稿
     # 21:00 JST は Mac cron (cron_21.sh) が担当（sns-orchestrator / Claude CLI が必要なため）
     # - cron: '0 12 * * *'
   workflow_dispatch:
@@ -17,7 +18,7 @@ on:
 jobs:
   post:
     runs-on: ubuntu-latest
-    if: github.event.schedule != '0 11 * * *' && github.event.inputs.mode != 'like-targets'
+    if: github.event.schedule != '0 11 * * *' && github.event.schedule != '0 13 * * *' && github.event.inputs.mode != 'like-targets'
 
     steps:
       - uses: actions/checkout@v4
@@ -74,20 +75,6 @@ jobs:
           INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
           THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
           THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}
-
-      # 07:00 JST のみ: 当日 21:00 JST に自動公開される Reels 予約投稿を作成する。
-      # published=false + scheduled_publish_time で Instagram にコンテナを登録し、
-      # Mac がスリープ中でも時刻になったら Instagram サーバーが自動公開する。
-      - name: Schedule Reels for 21:00 JST
-        if: github.event.schedule == '0 22 * * *' || github.event.inputs.mode == 'full'
-        run: python3 scripts/schedule_reels.py
-        env:
-          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
-          CLOUDINARY_CLOUD_NAME:  ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY:     ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET:  ${{ secrets.CLOUDINARY_API_SECRET }}
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
 
       # 07:00 JST のみ: Instagram/Threads の金融・副業系投稿を検索し、
       # 銀行員目線のコメント文案を生成して logs/comment_targets_YYYYMMDD.md に保存する。
@@ -150,3 +137,37 @@ jobs:
             git commit -m "chore: daily like targets $(date -u +%Y-%m-%d)"
             git push
           fi
+
+  # 22:00 JST: 翌朝 07:00 JST に公開される Instagram Reels を予約投稿する。
+  # フィード・カルーセル（21:00 JST）との同日同時刻投稿を避けるため時間をズラす。
+  schedule-reels:
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 13 * * *' || github.event.inputs.mode == 'full'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-noto-cjk
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Schedule Reels for 07:00 JST (翌朝)
+        run: python3 scripts/schedule_reels.py
+        env:
+          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
+          CLOUDINARY_CLOUD_NAME:  ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY:     ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET:  ${{ secrets.CLOUDINARY_API_SECRET }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
+          THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}
