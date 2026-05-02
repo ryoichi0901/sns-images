@@ -31,7 +31,9 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install python-dotenv requests
-      - name: いいね候補
+      - name: 競合リスト更新
+        run: python update_competitors.py
+      - name: いいね候補送信
         env:
           DISCORD_WEBHOOK_INSTAGRAM: ${{ secrets.DISCORD_WEBHOOK_INSTAGRAM }}
           DISCORD_WEBHOOK_ALERTS: ${{ secrets.DISCORD_WEBHOOK_ALERTS }}
