@@ -1,0 +1,31 @@
+name: FX Analysis Discord
+
+on:
+  schedule:
+    - cron: '0 22 * * *'   # JST 07:00
+    - cron: '0 6 * * *'    # JST 15:00
+    - cron: '0 13 * * *'   # JST 22:00
+  workflow_dispatch:
+
+jobs:
+  fx-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic yfinance python-dotenv requests
+
+      - name: Run FX Analysis
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DISCORD_WEBHOOK_FX: ${{ secrets.DISCORD_WEBHOOK_FX }}
+          DISCORD_WEBHOOK_INSTAGRAM: ${{ secrets.DISCORD_WEBHOOK_INSTAGRAM }}
+          DISCORD_WEBHOOK_UTAGE: ${{ secrets.DISCORD_WEBHOOK_UTAGE }}
+          DISCORD_WEBHOOK_ALERTS: ${{ secrets.DISCORD_WEBHOOK_ALERTS }}
+        run: python fx_analysis.py
