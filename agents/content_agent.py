@@ -20,6 +20,7 @@ THEMES_PATH = Path(__file__).parent.parent / "config" / "themes.json"
 TEMPLATES_PATH = Path(__file__).parent.parent / "config" / "post_templates.json"
 LOGS_DIR = Path(__file__).parent.parent / "logs"
 BUZZ_ANALYSIS_FILE = LOGS_DIR / "buzz_analysis.json"
+SELF_ANALYSIS_FILE = LOGS_DIR / "self_analysis.json"
 CTA_COUNTER_FILE = LOGS_DIR / "cta_counter.json"
 STYLE_PROFILE_FILE = LOGS_DIR / "style_profile.json"
 
@@ -271,8 +272,23 @@ def _load_style_profile() -> "dict | None":
         return None
 
 
+def _load_self_analysis() -> "dict | None":
+    """自アカウント投稿パフォーマンス分析結果を読み込む"""
+    if not SELF_ANALYSIS_FILE.exists():
+        return None
+    try:
+        with open(SELF_ANALYSIS_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+        patterns = data.get("patterns", {})
+        print(f"[ContentAgent] 自アカ分析読込: ER平均{patterns.get('avg_engagement_rate', '?')}%")
+        return data
+    except Exception as e:
+        print(f"[ContentAgent] 自アカ分析読込失敗（スキップ）: {e}")
+        return None
+
+
 def _load_buzz_analysis() -> "dict | None":
-    """週次バズ投稿分析結果を読み込む"""
+    """定期バズ投稿分析結果を読み込む（2日毎更新）"""
     if not BUZZ_ANALYSIS_FILE.exists():
         return None
     try:
@@ -459,6 +475,7 @@ def _build_user_prompt(
     own_top_posts: "list[dict] | None" = None,
     include_cta: bool = True,
     style_profile: "dict | None" = None,
+    self_analysis: "dict | None" = None,
 ) -> "tuple[dict, str]":
     """ユーザープロンプトとテンプレートを構築して返す"""
     themes = _load_themes()
@@ -562,7 +579,7 @@ CTA指示: {tmpl['cta_instruction']}
 
         prompt += f"""
 
-【週次バズ分析（Threads投稿に最優先で反映すること）】
+【定期バズ分析（Threads投稿に最優先で反映すること）】
 ▼ バズっているフックパターン:
 {top_hooks}
 
@@ -571,6 +588,32 @@ CTA指示: {tmpl['cta_instruction']}
 
 ▼ 自社投稿の改善提案:
 {suggestions}"""
+
+    # 自アカウント分析を注入
+    if self_analysis:
+        sa_patterns = self_analysis.get("patterns", {})
+        best_hours = ", ".join(sa_patterns.get("best_posting_hours", [])) or "データなし"
+        best_types = ", ".join(sa_patterns.get("best_media_types", [])) or "データなし"
+        caption_range = sa_patterns.get("optimal_caption_length", "データなし")
+        tag_count = sa_patterns.get("optimal_hashtag_count", "データなし")
+        top_patterns = "\n".join(
+            f"  - {p}" for p in sa_patterns.get("top_content_patterns", [])
+        ) or "  データなし"
+        sa_suggestions = "\n".join(
+            f"  - {s}" for s in sa_patterns.get("improvement_suggestions", [])
+        ) or "  データなし"
+
+        prompt += f"""
+
+【自アカウント分析（パフォーマンスの高い投稿パターンに合わせること）】
+▼ 高パフォーマンスの投稿時間帯: {best_hours}
+▼ 高パフォーマンスのメディアタイプ: {best_types}
+▼ 最適なキャプション長: {caption_range}
+▼ 最適なハッシュタグ数: {tag_count}個
+▼ 高パフォーマンス投稿の共通パターン:
+{top_patterns}
+▼ 次の投稿への改善提案:
+{sa_suggestions}"""
 
     # 自社の過去投稿を注入
     if own_top_posts:
@@ -672,6 +715,7 @@ def _threads_self_eval_loop(
     own_top_posts: "list[dict]",
     include_cta: bool,
     style_profile: "dict | None" = None,
+    self_analysis: "dict | None" = None,
 ) -> "tuple[str, int]":
     """
     Threads投稿テキストを自己評価ループで生成する。
@@ -695,6 +739,7 @@ def _threads_self_eval_loop(
             own_top_posts=own_top_posts,
             include_cta=include_cta,
             style_profile=style_profile,
+            self_analysis=self_analysis,
         )
         full_prompt = user_prompt + extra
 
@@ -752,6 +797,7 @@ def generate_content(
     buzz_analysis = _load_buzz_analysis()
     own_top_posts = _load_own_top_posts()
     style_profile = _load_style_profile()
+    self_analysis = _load_self_analysis()
     include_cta = _should_include_cta()
 
     print(f"[ContentAgent] CTA{'あり' if include_cta else 'なし'} (投稿数:{_read_post_count()})")
@@ -765,6 +811,7 @@ def generate_content(
         own_top_posts=own_top_posts,
         include_cta=include_cta,
         style_profile=style_profile,
+        self_analysis=self_analysis,
     )
     result = _call_claude(BASE_SYSTEM_PROMPT, user_prompt, 1500, client, "コンテンツ生成")
 
@@ -774,6 +821,7 @@ def generate_content(
         weekday, today, template_id, client,
         research_context, buzz_analysis, own_top_posts, include_cta,
         style_profile=style_profile,
+        self_analysis=self_analysis,
     )
     if threads_text:
         result["threads_text"] = threads_text
@@ -801,6 +849,7 @@ def generate_carousel_content(
     buzz_analysis = _load_buzz_analysis()
     own_top_posts = _load_own_top_posts()
     style_profile = _load_style_profile()
+    self_analysis = _load_self_analysis()
     include_cta = _should_include_cta()
 
     tmpl, user_prompt = _build_user_prompt(
@@ -811,6 +860,7 @@ def generate_carousel_content(
         own_top_posts=own_top_posts,
         include_cta=include_cta,
         style_profile=style_profile,
+        self_analysis=self_analysis,
     )
 
     for attempt in range(3):

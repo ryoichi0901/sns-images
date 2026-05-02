@@ -53,6 +53,7 @@ class LikeTarget:
     username: str
     url: str
     caption_head: str  # キャプション冒頭150文字
+    format_type: str = "フィード"  # フィード / 動画・リール / カルーセル
 
 
 def _is_quality_post(caption: str) -> bool:
@@ -114,7 +115,7 @@ def fetch_ig_targets(ig_user_id: str, access_token: str) -> list[LikeTarget]:
             f"{IG_API}/{hashtag_id}/recent_media",
             params={
                 "user_id": ig_user_id,
-                "fields": "id,caption,permalink,timestamp",
+                "fields": "id,caption,permalink,timestamp,media_type",
                 "access_token": access_token,
             },
             timeout=15,
@@ -133,12 +134,19 @@ def fetch_ig_targets(ig_user_id: str, access_token: str) -> list[LikeTarget]:
             if url in seen_urls or not _is_quality_post(caption):
                 continue
             seen_urls.add(url)
+            media_type = post.get("media_type", "IMAGE")
+            format_type = (
+                "動画・リール" if media_type == "VIDEO"
+                else "カルーセル" if media_type == "CAROUSEL_ALBUM"
+                else "フィード"
+            )
             targets.append(LikeTarget(
                 platform="Instagram",
                 keyword=keyword,
                 username="",  # recent_media は username を返さない
                 url=url,
                 caption_head=caption[:150],
+                format_type=format_type,
             ))
             count += 1
 
@@ -228,7 +236,7 @@ def write_markdown(targets: list[LikeTarget], today: datetime.date) -> Path:
         for i, t in enumerate(group, 1):
             author_str = f" &nbsp; `{t.username}`" if t.username else ""
             lines += [
-                f"### {i}. #{t.keyword}{author_str}",
+                f"### {i}. #{t.keyword} `{t.format_type}`{author_str}",
                 "",
                 f"🔗 {t.url}",
                 "",
@@ -241,6 +249,37 @@ def write_markdown(targets: list[LikeTarget], today: datetime.date) -> Path:
 
     out.write_text("\n".join(lines), encoding="utf-8")
     return out
+
+
+# ---------- Slack通知 ----------
+
+def _send_slack_notification(targets: list[LikeTarget], today: datetime.date) -> None:
+    webhook_url = os.getenv("SLACK_WEBHOOK_URL", "")
+    if not webhook_url:
+        print("[Slack] SLACK_WEBHOOK_URL 未設定 → スキップ")
+        return
+
+    ig_count = sum(1 for t in targets if t.platform == "Instagram")
+    th_count = sum(1 for t in targets if t.platform == "Threads")
+    reels_count = sum(1 for t in targets if t.format_type == "動画・リール")
+
+    repo = "ryoichi0901/sns-images"
+    date_str = today.strftime("%Y%m%d")
+    file_url = f"https://github.com/{repo}/blob/main/logs/like_targets_{date_str}.md"
+
+    text = (
+        f"👍 *いいね対象リスト {today.strftime('%Y-%m-%d')}*\n"
+        f"Instagram {ig_count}件（うちリール {reels_count}件）/ Threads {th_count}件\n"
+        f"<{file_url}|リストを開く>"
+    )
+    try:
+        r = requests.post(webhook_url, json={"text": text}, timeout=10)
+        if r.ok:
+            print(f"[Slack] 通知送信完了")
+        else:
+            print(f"[Slack] 通知失敗: {r.status_code} {r.text[:80]}")
+    except Exception as e:
+        print(f"[Slack] 通知エラー: {e}")
 
 
 # ---------- エントリポイント ----------
@@ -288,6 +327,7 @@ def main() -> None:
 
     out = write_markdown(targets, today)
     print(f"=== 出力完了: {out} ({len(targets)} 件) ===\n")
+    _send_slack_notification(targets, today)
 
 
 if __name__ == "__main__":

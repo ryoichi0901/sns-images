@@ -21,11 +21,11 @@ COMPETITOR_CONFIG = CONFIG_DIR / "competitors.json"
 POST_LOG_FILE = LOGS_DIR / "post_log.jsonl"
 
 THREADS_API = "https://graph.threads.net/v1.0"
-ANALYSIS_STALE_DAYS = 7
+ANALYSIS_STALE_DAYS = 2
 
 
 def is_analysis_fresh() -> bool:
-    """buzz_analysis.jsonが7日以内に生成されていればTrue"""
+    """buzz_analysis.jsonが2日以内に生成されていればTrue"""
     if not BUZZ_ANALYSIS_FILE.exists():
         return False
     try:
