@@ -1,58 +1,85 @@
 import os
 import json
+import time
 import requests
 from dotenv import load_dotenv
 from discord_notify import send_instagram_likes, send_alert
 
 load_dotenv(os.path.expanduser("~/Documents/Obsidian Vault/.env"))
 
-def get_like_candidates():
-    """競合分析・バズ分析からいいね候補を生成"""
-    candidates = []
+ACCESS_TOKEN = os.getenv("INSTAGRAM_ACCESS_TOKEN")
+BUSINESS_ID = os.getenv("INSTAGRAM_BUSINESS_ID")
 
-    # 競合アカウント分析から取得
-    competitor_path = os.path.join(os.path.dirname(__file__), "config/competitor_analysis.json")
-    if os.path.exists(competitor_path):
-        with open(competitor_path, "r") as f:
-            data = json.load(f)
-        accounts = data if isinstance(data, list) else data.get("accounts", [])
-        for acc in accounts[:5]:
-            username = acc.get("username") or acc.get("account", "")
-            if username:
-                candidates.append({
-                    "account": f"@{username.lstrip('@')}",
-                    "url": f"https://www.instagram.com/{username.lstrip('@')}/",
-                    "reason": acc.get("reason") or acc.get("description") or "競合アカウント・エンゲージ確認推奨"
-                })
+# チェックするハッシュタグ（追加・削除自由）
+HASHTAGS = [
+    "AI副業",
+    "AI自動化",
+    "生成AI副業",
+    "資産形成",
+    "副業初心者",
+    "会社員副業",
+    "NISA副業",
+    "お金の勉強",
+]
 
-    # バズ分析から取得
-    buzz_path = os.path.join(os.path.dirname(__file__), "config/buzz_analysis.json")
-    if os.path.exists(buzz_path):
-        with open(buzz_path, "r") as f:
-            buzz = json.load(f)
-        posts = buzz if isinstance(buzz, list) else buzz.get("posts", [])
-        for post in posts[:3]:
-            url = post.get("url") or post.get("link", "")
-            account = post.get("account") or post.get("username", "")
-            reason = post.get("reason") or post.get("description") or "バズ投稿・いいね推奨"
-            if url or account:
-                candidates.append({
-                    "account": f"@{account.lstrip('@')}" if account else "バズ投稿",
-                    "url": url or f"https://www.instagram.com/{account.lstrip('@')}/",
-                    "reason": reason
-                })
+def get_hashtag_posts(hashtag: str) -> list:
+    """ハッシュタグの最新投稿を取得"""
+    try:
+        # ハッシュタグIDを取得
+        res = requests.get(
+            "https://graph.facebook.com/v25.0/ig_hashtag_search",
+            params={
+                "user_id": BUSINESS_ID,
+                "q": hashtag,
+                "access_token": ACCESS_TOKEN,
+            },
+            timeout=10
+        )
+        data = res.json()
+        if "data" not in data or not data["data"]:
+            return []
+        hashtag_id = data["data"][0]["id"]
 
-    return candidates
+        # 最新投稿を取得
+        res2 = requests.get(
+            f"https://graph.facebook.com/v25.0/{hashtag_id}/recent_media",
+            params={
+                "user_id": BUSINESS_ID,
+                "fields": "id,media_type,permalink",
+                "access_token": ACCESS_TOKEN,
+                "limit": 3,
+            },
+            timeout=10
+        )
+        posts = res2.json().get("data", [])
+        return [
+            {
+                "account": f"#{hashtag}",
+                "url": p.get("permalink", ""),
+                "reason": f"ハッシュタグ #{hashtag} の最新投稿（{p.get('media_type', '')}）"
+            }
+            for p in posts if p.get("permalink")
+        ]
+    except Exception as e:
+        print(f"[WARN] #{hashtag} 取得失敗: {e}")
+        return []
 
 def run():
     print("=== Instagram いいね候補生成 ===")
     try:
-        candidates = get_like_candidates()
+        candidates = []
+        for tag in HASHTAGS:
+            posts = get_hashtag_posts(tag)
+            candidates.extend(posts)
+            time.sleep(1)  # レート制限対策
+
         if not candidates:
-            send_alert("いいね候補データが見つかりませんでした", level="warning")
+            send_alert("いいね候補が見つかりませんでした。APIトークンを確認してください。", level="warning")
             return
-        send_instagram_likes(candidates)
-        print(f"=== {len(candidates)}件送信完了 ===")
+
+        # 最大10件に絞る
+        send_instagram_likes(candidates[:10])
+        print(f"=== {len(candidates[:10])}件送信完了 ===")
     except Exception as e:
         send_alert(f"Instagram いいね候補生成エラー: {str(e)}", level="error")
 
