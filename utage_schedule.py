@@ -1,60 +1,102 @@
-import os
-import json
+"""
+utage_schedule.py - Playwright版
+UTAGEの申込者一覧をスクレイピングして今日・明日・明後日の予約をDiscordに送信
+"""
+import asyncio, json, os, re, sys
+from datetime import date, datetime, timedelta
+from pathlib import Path
 import requests
-from datetime import datetime
-from dotenv import load_dotenv
-from discord_notify import send_utage_schedule, send_alert
+from playwright.async_api import async_playwright
 
-load_dotenv(os.path.expanduser("~/Documents/Obsidian Vault/.env"))
+UTAGE_LOGIN_URL = "https://utage-system.com/operator/u3LOxxsfqxbU/login"
+APPLICANT_URL   = "https://utage-system.com/event/RJ3FemO7uGXt/applicant"
+DISCORD_WEBHOOK = os.environ.get("DISCORD_WEBHOOK_UTAGE", "")
+UTAGE_EMAIL     = os.environ.get("UTAGE_EMAIL", "")
+UTAGE_PASSWORD  = os.environ.get("UTAGE_PASSWORD", "")
 
-UTAGE_API_KEY = os.getenv("UTAGE_API_KEY", "")
-UTAGE_BASE_URL = "https://utage-system.com/api/v1"
+def target_dates():
+    today = date.today()
+    return [today + timedelta(days=i) for i in range(3)]
 
-def get_utage_schedule():
-    """UTAGEから本日のスケジュールを取得"""
-    if not UTAGE_API_KEY:
-        # APIキーがない場合はサンプルデータ
-        return [
-            {"time": "確認できません", "name": "UTAGE_API_KEYを設定してください", "type": "設定エラー"}
-        ]
-    
-    today = datetime.now().strftime("%Y-%m-%d")
-    headers = {
-        "Authorization": f"Bearer {UTAGE_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    
-    try:
-        res = requests.get(
-            f"{UTAGE_BASE_URL}/schedules",
-            headers=headers,
-            params={"date": today},
-            timeout=10
-        )
-        if res.status_code == 200:
-            data = res.json()
-            events = data if isinstance(data, list) else data.get("schedules", [])
-            return [
-                {
-                    "time": e.get("time") or e.get("start_time", ""),
-                    "name": e.get("name") or e.get("customer_name", ""),
-                    "type": e.get("type") or e.get("session_type", "セッション")
-                }
-                for e in events
-            ]
+async def fetch_reservations():
+    email    = UTAGE_EMAIL
+    password = UTAGE_PASSWORD
+    if not email or not password:
+        raise ValueError("UTAGE_EMAIL / UTAGE_PASSWORD が未設定")
+
+    reservations = []
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        page    = await browser.new_page()
+        await page.goto(UTAGE_LOGIN_URL)
+        await page.wait_for_load_state("networkidle")
+        try:
+            await page.fill('input[type="email"]', email)
+            await page.fill('input[type="password"]', password)
+            await page.click('button[type="submit"]')
+        except Exception:
+            await page.fill('input[name="email"]', email)
+            await page.fill('input[name="password"]', password)
+            await page.click('input[type="submit"]')
+        await page.wait_for_load_state("networkidle")
+        await page.goto(APPLICANT_URL)
+        await page.wait_for_load_state("networkidle")
+        rows = await page.query_selector_all("tr")
+        for row in rows:
+            text = await row.inner_text()
+            m = re.search(r"(\d{4}/\d{2}/\d{2})[^\d]*(\d{2}:\d{2})-(\d{2}:\d{2})", text)
+            if not m:
+                continue
+            try:
+                dt = datetime.strptime(m.group(1), "%Y/%m/%d").date()
+            except ValueError:
+                continue
+            cells = await row.query_selector_all("td")
+            name = "（名前不明）"
+            for cell in cells:
+                t = (await cell.inner_text()).strip()
+                if re.search(r"[\u3040-\u30ff\u4e00-\u9fff]", t) and 2 < len(t) < 15:
+                    if not re.search(r"\d{4}/\d{2}/\d{2}", t):
+                        name = t
+                        break
+            reservations.append({"name": name, "date": dt, "slot": f"{m.group(2)}〜{m.group(3)}"})
+        await browser.close()
+    return reservations
+
+def build_message(reservations):
+    targets = target_dates()
+    wd = ["月","火","水","木","金","土","日"]
+    lines = ["📅 **UTAGEスケジュール（今日・明日・明後日）**\n"]
+    for i, d in enumerate(targets):
+        label  = ["今日","明日","明後日"][i]
+        header = f"**{label}（{d.month}/{d.day}・{wd[d.weekday()]}）**"
+        booked = [r for r in reservations if r["date"] == d]
+        if booked:
+            lines.append(header + "\n" + "\n".join(f"  ✅ {r['slot']}　{r['name']}" for r in booked))
         else:
-            return []
-    except Exception as e:
-        raise Exception(f"UTAGE API エラー: {str(e)}")
+            lines.append(header + "\n  ⚠️ 予約なし　← 枠を埋めませんか？")
+        lines.append("")
+    lines.append(f"_取得: {datetime.now().strftime('%Y-%m-%d %H:%M')}_")
+    return "\n".join(lines)
 
-def run():
-    print("=== UTAGEスケジュール取得 ===")
+def send_discord(msg):
+    if not DISCORD_WEBHOOK:
+        print("DISCORD_WEBHOOK_UTAGE 未設定")
+        return
+    requests.post(DISCORD_WEBHOOK, json={"content": msg}).raise_for_status()
+
+async def main():
     try:
-        events = get_utage_schedule()
-        send_utage_schedule(events)
-        print(f"=== {len(events)}件送信完了 ===")
+        reservations = await fetch_reservations()
+        msg = build_message(reservations)
+        print(msg)
+        send_discord(msg)
+        print("Discord送信完了")
     except Exception as e:
-        send_alert(f"UTAGEスケジュール取得エラー: {str(e)}", level="error")
+        err = f"⚠️ UTAGEスケジュールエラー: {e}"
+        print(err, file=sys.stderr)
+        send_discord(err)
+        sys.exit(1)
 
 if __name__ == "__main__":
-    run()
+    asyncio.run(main())

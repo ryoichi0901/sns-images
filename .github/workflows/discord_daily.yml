@@ -1,10 +1,11 @@
-name: Discord Daily Notifications
+name: Discord Daily Notification
 
 on:
   schedule:
-    - cron: '0 22 * * *'   # JST 07:00
     - cron: '0 6 * * *'    # JST 15:00
     - cron: '0 13 * * *'   # JST 22:00
+    - cron: '0 23 * * *'   # JST 08:00
+    - cron: '0 12 * * *'   # JST 21:00
   workflow_dispatch:
 
 jobs:
@@ -46,10 +47,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install python-dotenv requests
+      - run: pip install python-dotenv requests playwright
+      - run: playwright install chromium --with-deps
       - name: UTAGEスケジュール
         env:
-          UTAGE_API_KEY: ${{ secrets.UTAGE_API_KEY }}
+          UTAGE_EMAIL: ${{ secrets.UTAGE_EMAIL }}
+          UTAGE_PASSWORD: ${{ secrets.UTAGE_PASSWORD }}
           DISCORD_WEBHOOK_UTAGE: ${{ secrets.DISCORD_WEBHOOK_UTAGE }}
           DISCORD_WEBHOOK_ALERTS: ${{ secrets.DISCORD_WEBHOOK_ALERTS }}
-        run: python utage_schedule.py
+        run: python3 utage_schedule.py
