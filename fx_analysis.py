@@ -10,7 +10,7 @@ from discord_notify import send_embed, send_alert
 load_dotenv(os.path.expanduser("~/Documents/Obsidian Vault/.env"))
 
 SYMBOLS = {
-    "GOLD / XAU-USD": "GC=F",
+    "GOLD / XAU-USD": "XAUUSD=X",
     "USD/JPY":        "JPY=X",
     "BTC/USD":        "BTC-USD",
 }
@@ -115,9 +115,56 @@ def send_fx_report(name, data, result):
 
     send_embed("fx", f"🟡 {name} 分析レポート", desc, fields=fields, color=color)
 
+
+WEEKEND_SKIP = {"GOLD / XAU-USD", "USD/JPY"}
+
+def is_fx_market_closed():
+    import datetime
+    jst = datetime.timezone(datetime.timedelta(hours=9))
+    now = datetime.datetime.now(jst)
+    w, h = now.weekday(), now.hour
+    return (w == 5 and h >= 7) or w == 6 or (w == 0 and h < 7)
+
+def is_sunday_morning():
+    import datetime
+    jst = datetime.timezone(datetime.timedelta(hours=9))
+    now = datetime.datetime.now(jst)
+    return now.weekday() == 6 and 7 <= now.hour < 12
+
+def send_weekly_review():
+    import datetime
+    jst = datetime.timezone(datetime.timedelta(hours=9))
+    now = datetime.datetime.now(jst)
+    fields = []
+    for name, ticker in SYMBOLS.items():
+        try:
+            t = yf.Ticker(ticker)
+            hist = t.history(period="7d")
+            if hist.empty:
+                continue
+            ws = round(float(hist.iloc[0]["Close"]), 2)
+            we = round(float(hist.iloc[-1]["Close"]), 2)
+            pct = round((we - ws) / ws * 100, 2)
+            high = round(float(hist["High"].max()), 2)
+            low = round(float(hist["Low"].min()), 2)
+            d = "📈" if pct >= 0 else "📉"
+            fields.append({"name": f"{d} {name}",
+                "value": f"週間変動: **{pct:+.2f}%**\n高値: {high} / 安値: {low}\n週終値: {we}",
+                "inline": True})
+        except Exception as e:
+            print(f"週次エラー {name}: {e}")
+    send_embed("fx", f"📊 週間FX振り返り（{now.strftime('%Y/%m/%d')}）",
+               "先週1週間の主要マーケット動向まとめ", fields=fields, color=0x9B59B6)
+
 def run():
     print("=== FX分析開始 ===")
+    if is_sunday_morning():
+        send_weekly_review()
+    market_closed = is_fx_market_closed()
     for name, ticker in SYMBOLS.items():
+        if market_closed and name in WEEKEND_SKIP:
+            print(f"[スキップ] {name}：週末FX市場閉鎖中")
+            continue
         try:
             data = get_price_data(ticker)
             if not data:
@@ -127,7 +174,7 @@ def run():
             send_fx_report(name, data, result)
             time.sleep(1)
         except Exception as e:
-            send_alert(f"{name}の分析中にエラー: {str(e)}", level="error")
+            send_alert(f"{name}の分析中にエラー：{str(e)}", level="error")
     print("=== FX分析完了 ===")
 
 if __name__ == "__main__":
