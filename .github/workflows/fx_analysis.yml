@@ -1,31 +1,52 @@
-name: FX Analysis Discord
-
+name: FX Analysis
 on:
   schedule:
-    - cron: '0 22 * * *'   # JST 07:00
-    - cron: '0 6 * * *'    # JST 15:00
-    - cron: '0 13 * * *'   # JST 22:00
+    - cron: "0 22 * * *"
+    - cron: "0 6 * * *"
+    - cron: "0 13 * * *"
   workflow_dispatch:
-
 jobs:
   fx-analysis:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install anthropic yfinance python-dotenv requests
-
-      - name: Run FX Analysis
+          python-version: "3.11"
+      - run: pip install requests python-dotenv anthropic
+      - name: FX分析実行
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
           DISCORD_WEBHOOK_FX: ${{ secrets.DISCORD_WEBHOOK_FX }}
-          DISCORD_WEBHOOK_INSTAGRAM: ${{ secrets.DISCORD_WEBHOOK_INSTAGRAM }}
-          DISCORD_WEBHOOK_UTAGE: ${{ secrets.DISCORD_WEBHOOK_UTAGE }}
-          DISCORD_WEBHOOK_ALERTS: ${{ secrets.DISCORD_WEBHOOK_ALERTS }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python fx_analysis.py
+      - name: ログ記録
+        if: always()
+        run: |
+          mkdir -p logs
+          python -c "
+          import json
+          from datetime import datetime, timezone, timedelta
+          JST = timezone(timedelta(hours=9))
+          status = 'success' if '${{ job.status }}' != 'failure' else 'failure'
+          with open('logs/fx_analysis_last_run.json','w') as f:
+              json.dump({'last_run': datetime.now(JST).isoformat(), 'status': status}, f)
+          "
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        if: always()
+        with:
+          commit_message: "chore: fx log"
+          file_pattern: "logs/*.json"
+      - name: 失敗通知
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_FX: ${{ secrets.DISCORD_WEBHOOK_FX }}
+        run: |
+          python -c "
+          import os,requests
+          from datetime import datetime,timezone,timedelta
+          w=os.getenv('DISCORD_WEBHOOK_FX')
+          if w:
+              requests.post(w,json={'content':'❌ FX分析失敗 $(date +\"%m/%d %H:%M\") JST'},timeout=10)
+          "

@@ -1,174 +1,76 @@
 name: SNS Auto Post
-
 on:
   schedule:
-    - cron: '0 22 * * *'   # 07:00 JST  Threads テキストのみ
-    - cron: '0 3 * * *'    # 12:00 JST  Threads テキストのみ
-    - cron: '0 23 * * *'   # 08:00 JST  いいね対象リスト生成 + Slack通知
-    - cron: '0 13 * * *'   # 22:00 JST  Reels 翌朝07:00 JST 予約投稿
-    # 21:00 JST は Mac cron (cron_21.sh) が担当（sns-orchestrator / Claude CLI が必要なため）
-    # - cron: '0 12 * * *'
+    - cron: "30 22 * * *"
+    - cron: "0 3 * * *"
+    - cron: "0 11 * * *"
   workflow_dispatch:
     inputs:
-      mode:
-        description: 'threads-only / full（Instagram + Threads + Reels）/ like-targets'
-        required: false
-        default: 'threads-only'
-
+      slot:
+        description: "morning / noon / evening"
+        default: "morning"
+      dry_run:
+        description: "true / false"
+        default: "false"
 jobs:
   post:
     runs-on: ubuntu-latest
-    if: github.event.schedule != '0 23 * * *' && github.event.schedule != '0 13 * * *' && github.event.inputs.mode != 'like-targets'
-
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install FFmpeg
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y ffmpeg
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Install system dependencies
+          python-version: "3.11"
+      - run: pip install requests python-dotenv anthropic pillow
+      - name: スロット判定
+        id: slot
         run: |
-          sudo apt-get update -qq
-          # FFmpeg は ubuntu-latest に標準搭載済み
-          # Pillow での日本語テキスト描画に使用するフォント
-          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
-
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
-      - name: Install Node dependencies
-        run: npm ci
-
-      - name: Install Chromium for Puppeteer
-        run: npx puppeteer browsers install chrome
-
-      - name: Determine post mode
-        id: mode
-        run: |
-          DISPATCH="${{ github.event.inputs.mode }}"
-
-          if [ "$DISPATCH" = "full" ]; then
-            echo "cmd=python3 scripts/run.py --platforms ig th --reels" >> $GITHUB_OUTPUT
-            echo "label=手動フル投稿（Instagram + Threads + Reels）" >> $GITHUB_OUTPUT
+          HOUR=$(TZ=Asia/Tokyo date +%H)
+          INPUT="${{ github.event.inputs.slot }}"
+          if [ -n "$INPUT" ]; then
+            echo "slot=$INPUT" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" -ge 7 ] && [ "$HOUR" -lt 11 ]; then
+            echo "slot=morning" >> $GITHUB_OUTPUT
+          elif [ "$HOUR" -ge 11 ] && [ "$HOUR" -lt 16 ]; then
+            echo "slot=noon" >> $GITHUB_OUTPUT
           else
-            echo "cmd=python3 scripts/run.py --platforms th" >> $GITHUB_OUTPUT
-            echo "label=Threads テキストのみ" >> $GITHUB_OUTPUT
+            echo "slot=evening" >> $GITHUB_OUTPUT
           fi
-
-      - name: Run post
-        run: |
-          echo "▶ ${{ steps.mode.outputs.label }}"
-          ${{ steps.mode.outputs.cmd }}
+      - name: 投稿実行
         env:
-          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
-          CLOUDINARY_CLOUD_NAME:  ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY:     ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET:  ${{ secrets.CLOUDINARY_API_SECRET }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
-          THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
-          THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}
-
-      # 07:00 JST のみ: Instagram/Threads の金融・副業系投稿を検索し、
-      # 銀行員目線のコメント文案を生成して logs/comment_targets_YYYYMMDD.md に保存する。
-      # git push でリポジトリに自動コミットされるため git pull で確認できる。
-      # 実際のコメント投稿は手動で行う（自動送信なし）。
-      - name: Research comment targets
-        if: github.event.schedule == '0 22 * * *' || github.event.inputs.mode == 'full'
-        run: python3 scripts/research_comments.py
-        env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-
-      - name: Commit research output
-        continue-on-error: true
-        if: github.event.schedule == '0 22 * * *' || github.event.inputs.mode == 'full'
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: python scripts/post.py --slot ${{ steps.slot.outputs.slot }}
+      - name: ログ記録
+        if: always()
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add logs/comment_targets_*.md
-          if git diff --cached --quiet; then
-            echo "変更なし: コミットをスキップします"
-          else
-            git commit -m "chore: daily comment research $(date -u +%Y-%m-%d)"
-            git push
-          fi
-
-  # 20:00 JST: Instagram/Threads のハッシュタグ検索でいいね対象リストを生成する。
-  # logs/like_targets_YYYYMMDD.md に出力し git push で保存。実際のいいねは手動。
-  like-targets:
-    runs-on: ubuntu-latest
-    if: github.event.schedule == '0 23 * * *' || github.event.inputs.mode == 'like-targets'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+          python -c "
+          import json,os
+          from datetime import datetime,timezone,timedelta
+          JST=timezone(timedelta(hours=9))
+          slot='${{ steps.slot.outputs.slot }}'
+          s='success' if '${{ job.status }}'!='failure' else 'failure'
+          import pathlib
+          p=pathlib.Path(f'logs/post_{slot}_last_run.json')
+          p.parent.mkdir(exist_ok=True)
+          p.write_text(json.dumps({'last_run':datetime.now(JST).isoformat(),'status':s}))
+          "
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        if: always()
         with:
-          python-version: '3.11'
-
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
-      - name: Generate like targets
-        run: python3 scripts/generate_like_targets.py
+          commit_message: "chore: post log"
+          file_pattern: "logs/*.json"
+      - name: 失敗通知
+        if: failure()
         env:
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
-          THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
-          THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}
-          SLACK_WEBHOOK_URL:      ${{ secrets.SLACK_WEBHOOK_URL }}
-
-      - name: Commit like targets
-        continue-on-error: true
+          DISCORD_WEBHOOK_HEALTH: ${{ secrets.DISCORD_WEBHOOK_HEALTH }}
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add logs/like_targets_*.md logs/ig_hashtag_ids.json
-          if git diff --cached --quiet; then
-            echo "変更なし: コミットをスキップします"
-          else
-            git commit -m "chore: daily like targets $(date -u +%Y-%m-%d)"
-            git push
-          fi
-
-  # 22:00 JST: 翌朝 07:00 JST に公開される Instagram Reels を予約投稿する。
-  # フィード・カルーセル（21:00 JST）との同日同時刻投稿を避けるため時間をズラす。
-  schedule-reels:
-    runs-on: ubuntu-latest
-    if: github.event.schedule == '0 13 * * *' || github.event.inputs.mode == 'full'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install FFmpeg
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg fonts-noto-cjk
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
-      - name: Schedule Reels for 07:00 JST (翌朝)
-        run: python3 scripts/schedule_reels.py
-        env:
-          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
-          CLOUDINARY_CLOUD_NAME:  ${{ secrets.CLOUDINARY_CLOUD_NAME }}
-          CLOUDINARY_API_KEY:     ${{ secrets.CLOUDINARY_API_KEY }}
-          CLOUDINARY_API_SECRET:  ${{ secrets.CLOUDINARY_API_SECRET }}
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_BUSINESS_ID:  ${{ secrets.INSTAGRAM_BUSINESS_ID }}
-          THREADS_ACCESS_TOKEN:   ${{ secrets.THREADS_ACCESS_TOKEN }}
-          THREADS_USER_ID:        ${{ secrets.THREADS_USER_ID }}
+          python -c "
+          import os,requests
+          w=os.getenv('DISCORD_WEBHOOK_HEALTH')
+          if w: requests.post(w,json={'content':'❌ SNS投稿失敗[${{ steps.slot.outputs.slot }}]'},timeout=10)
+          "
