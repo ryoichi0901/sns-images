@@ -5,6 +5,10 @@ on:
     - cron: "0 6 * * *"
     - cron: "0 13 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   fx-analysis:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install requests python-dotenv anthropic
+      - run: pip install requests python-dotenv anthropic yfinance
       - name: FX分析実行
         env:
           ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
@@ -38,15 +42,3 @@ jobs:
         with:
           commit_message: "chore: fx log"
           file_pattern: "logs/*.json"
-      - name: 失敗通知
-        if: failure()
-        env:
-          DISCORD_WEBHOOK_FX: ${{ secrets.DISCORD_WEBHOOK_FX }}
-        run: |
-          python -c "
-          import os,requests
-          from datetime import datetime,timezone,timedelta
-          w=os.getenv('DISCORD_WEBHOOK_FX')
-          if w:
-              requests.post(w,json={'content':'❌ FX分析失敗 $(date +\"%m/%d %H:%M\") JST'},timeout=10)
-          "

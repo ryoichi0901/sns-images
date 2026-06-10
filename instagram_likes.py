@@ -3,7 +3,6 @@ import json
 import time
 import requests
 from dotenv import load_dotenv
-from discord_notify import send_instagram_likes, send_alert
 
 load_dotenv(os.path.expanduser("~/Documents/Obsidian Vault/.env"))
 
@@ -74,14 +73,12 @@ def run():
             time.sleep(1)  # レート制限対策
 
         if not candidates:
-            send_alert("いいね候補が見つかりませんでした。APIトークンを確認してください。", level="warning")
+            print("いいね候補が見つかりませんでした。Discord通知は送信しません。")
             return
 
-        # 最大10件に絞る
-        send_instagram_likes(candidates[:10])
-        print(f"=== {len(candidates[:10])}件送信完了 ===")
+        print(f"=== {len(candidates[:10])}件取得（Discord通知は停止中） ===")
     except Exception as e:
-        send_alert(f"Instagram いいね候補生成エラー: {str(e)}", level="error")
+        print(f"Instagram いいね候補生成エラー（Discord通知なし）: {str(e)}")
 
 if __name__ == "__main__":
     run()
