@@ -10,7 +10,7 @@ from discord_notify import send_embed, send_alert
 load_dotenv(os.path.expanduser("~/Documents/Obsidian Vault/.env"))
 
 SYMBOLS = {
-    "GOLD / XAU-USD": "XAUUSD=X",
+    "GOLD / XAU-USD": "GC=F",
     "USD/JPY":        "JPY=X",
     "BTC/USD":        "BTC-USD",
 }
